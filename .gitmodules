@@ -1,0 +1,15 @@
+[submodule "FAST_LIO"]
+	path = FAST_LIO
+	url = https://github.com/hku-mars/FAST_LIO.git
+[submodule "costmap_converter"]
+	path = costmap_converter
+	url = git@github.com:rst-tu-dortmund/costmap_converter.git
+[submodule "obstacle_segmentation_tc"]
+	path = obstacle_segmentation_tc
+	url = git@github.com:nuaa-rm/obstacle_segmentation_tc.git
+[submodule "robot_description"]
+	path = robot_description
+	url = git@github.com:nuaa-rm/robot_description.git
+[submodule "teb_local_planner"]
+	path = teb_local_planner
+	url = git@github.com:rst-tu-dortmund/teb_local_planner.git

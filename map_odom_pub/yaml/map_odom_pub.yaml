@@ -1,0 +1,6 @@
+map_odom_pub_node:
+  ros__parameters:
+    global_frame_id: odom
+    odom_frame_id: livox
+    initial_trans: [ 0.0, 0.0, 0.0 ] # 初始位姿
+    initial_rot: [ 0.0, 0.0, 0.0, 1.0 ] # 初始四元数

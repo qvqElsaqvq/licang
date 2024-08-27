@@ -1,0 +1,12 @@
+
+.vscode/
+
+*.png
+
+*.pcd
+
+robot_bring_up/maps/
+
+**/cmake-build-debug
+
+**/cmake-build-debug-
