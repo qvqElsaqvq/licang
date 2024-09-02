@@ -6,7 +6,6 @@
 #define MAP_ODOM_PUB_H
 
 #include "rclcpp/rclcpp.hpp"
-#include "rclcpp_lifecycle/lifecycle_node.hpp"
 #include <geometry_msgs/msg/transform_stamped.hpp>
 #include <tf2_ros/transform_broadcaster.h>
 #include <tf2_ros/buffer.h>
