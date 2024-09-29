@@ -21,7 +21,6 @@ def generate_launch_description():
     robot_bring_up_path = get_package_share_directory("robot_bring_up")
     init_transform_path = get_package_share_directory("map_odom_pub")
     obstacle_segmentation_path = get_package_share_directory("obstacle_segmentation")
-    robot_description_path = get_package_share_directory("robot_description")
     livox_driver_path = get_package_share_directory("livox_ros_driver2")
     yaml_path = os.path.join(robot_bring_up_path, "config", "robot.yaml")
     nav2_bringup_dir = get_package_share_directory("nav2_bringup") #nav2_bringup功能包
@@ -52,15 +51,6 @@ def generate_launch_description():
         "launch_gazebo",
         default_value=param_launch_gazebo,
         description="Whether to run gazebo",
-    )
-    robot_description_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(
-            [robot_description_path, "/launch", "/robot_description.launch.py"]
-        ),
-        launch_arguments={
-            "launch_rviz": param_launch_rviz,
-            "launch_gazebo": param_launch_gazebo,
-        }.items(),
     )
     livox_driver_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
@@ -120,15 +110,14 @@ def generate_launch_description():
             declare_rviz_config_dir,
             declare_launch_rviz,
             livox_driver_launch,
-            robot_description_launch,
+            obstacle_segmentation_launch,
+            init_transform_launch,
+            rviz_node,
             TimerAction(
                 period=5.0,
                 actions=[
-                    obstacle_segmentation_launch,
                     navigation_launch,
-                    fast_lio_launch,
-                    init_transform_launch,
-                    rviz_node
+                    fast_lio_launch
                 ],
             )
             ]

@@ -22,7 +22,7 @@ MapOdomPublishNode::MapOdomPublishNode()
     get_parameter("initial_rot", initial_rot_);
 
     // 初始化订阅者、发布者、服务端、客户端
-    timer_ = this->create_wall_timer( 10s, std::bind(&MapOdomPublishNode::timer_callback, this));
+    timer_ = this->create_wall_timer( 0.05s, std::bind(&MapOdomPublishNode::timer_callback, this));
     RCLCPP_INFO(get_logger(), "初始位姿初始化完成");
 }
 
@@ -41,7 +41,7 @@ void MapOdomPublishNode::timer_callback()
     init_transform_.transform.rotation.z = initial_rot_[2];
     init_transform_.transform.rotation.w = initial_rot_[3];
     broadcaster_.sendTransform(init_transform_);
-    RCLCPP_INFO(get_logger(), "translation: [ %f, %f, %f], rotation: [ %f, %f, %f, %f]", initial_trans_[0], initial_trans_[1],
-        initial_trans_[2], initial_rot_[0], initial_rot_[1], initial_rot_[2], initial_rot_[3]);
+    //RCLCPP_INFO(get_logger(), "translation: [ %f, %f, %f], rotation: [ %f, %f, %f, %f]", initial_trans_[0], initial_trans_[1],
+    //    initial_trans_[2], initial_rot_[0], initial_rot_[1], initial_rot_[2], initial_rot_[3]);
     init_transform_mtx_.unlock();
 }

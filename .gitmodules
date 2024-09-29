@@ -7,9 +7,6 @@
 [submodule "obstacle_segmentation_tc"]
 	path = obstacle_segmentation_tc
 	url = https://github.com/qvqElsaqvq/obstacle_segmentation_tc.git
-[submodule "robot_description"]
-	path = robot_description
-	url = git@github.com:nuaa-rm/robot_description.git
 [submodule "teb_local_planner"]
 	path = teb_local_planner
 	url = https://github.com/qvqElsaqvq/teb_local_planner.git

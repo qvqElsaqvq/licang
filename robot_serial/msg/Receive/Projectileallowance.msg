@@ -1,0 +1,4 @@
+#0x0207 #/robot/projectileallowance
+uint16 projectile_allowance_17mm#17mm 弹丸允许发弹量
+uint16 projectile_allowance_42mm#42mm 弹丸允许发弹量
+uint16 remaining_gold_coin#剩余金币数量
