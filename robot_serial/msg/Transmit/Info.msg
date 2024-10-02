@@ -1,4 +1,0 @@
-#topic:/robot/info
-uint16 sender_id #发送者的 ID,需要校验发送者的 ID 正确性
-uint16 receiver_id #接收者的 ID,需要校验接收者的 ID 正确性,仅支持发送己方选手端
-uint8[30] user_data #字符,长度30,以 utf-16,格式编码发送，支持显示中文。编码发送时请注意数据的大小端问题

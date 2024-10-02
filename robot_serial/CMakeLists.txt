@@ -26,30 +26,9 @@ find_package(geometry_msgs REQUIRED)
 find_package(rosidl_default_generators REQUIRED)
 
 rosidl_generate_interfaces(${PROJECT_NAME}
-        "msg/Transmit/Action.msg"
-        "msg/Transmit/Decision.msg"
         "msg/Transmit/Map.msg"
-        "msg/Transmit/Info.msg"
         "msg/Transmit/Velocity.msg"
-        "msg/Transmit/Whitelist.msg"
-        "msg/Receive/Buff.msg"
-        "msg/Receive/Dartinfo.msg"
-        "msg/Receive/Event.msg"
-        "msg/Receive/Gameresult.msg"
-        "msg/Receive/Gamestatus.msg"
-        "msg/Receive/Hp.msg"
-        "msg/Receive/Hurtdata.msg"
-        "msg/Receive/Interaction.msg"
         "msg/Receive/Mapcommand.msg"
-        "msg/Receive/Projectileallowance.msg"
-        "msg/Receive/Refereewarning.msg"
-        "msg/Receive/Rfidstatus.msg"
-        "msg/Receive/Robotp.msg"
-        "msg/Receive/Robotposition.msg"
-        "msg/Receive/Robotstatus.msg"
-        "msg/Receive/Sentryinfo.msg"
-        "msg/Receive/Supplyprojectile.msg"
-        "msg/Receive/Switch.msg"
         DEPENDENCIES std_msgs
 )
 

@@ -6,8 +6,6 @@
     <mapping directory="$PROJECT_DIR$/FAST_LIO/include/ikd-Tree" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/costmap_converter" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/obstacle_segmentation_tc" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/robot_description" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/robot_description/livox_laser_simulation_RO2" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/teb_local_planner" vcs="Git" />
   </component>
 </project>
