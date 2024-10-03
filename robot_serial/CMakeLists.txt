@@ -26,9 +26,10 @@ find_package(geometry_msgs REQUIRED)
 find_package(rosidl_default_generators REQUIRED)
 
 rosidl_generate_interfaces(${PROJECT_NAME}
-        "msg/Transmit/Map.msg"
         "msg/Transmit/Velocity.msg"
-        "msg/Receive/Mapcommand.msg"
+        "msg/Transmit/Decision.msg"
+        "msg/Receive/Imagelocation.msg"
+        "msg/Receive/Qrcodeinfo.msg"
         DEPENDENCIES std_msgs
 )
 
@@ -54,16 +55,43 @@ set(LIBRARIES
 include_directories(include thirdparty/serialib ${EIGEN3_INCLUDE_DIRS})
 
 
-add_executable(${PROJECT_NAME}_node
-        src/robot_serial_node.cpp)      
-ament_target_dependencies(${PROJECT_NAME}_node ${AMENT_DEPENDENCIES})
-rosidl_target_interfaces(${PROJECT_NAME}_node ${PROJECT_NAME} "rosidl_typesupport_cpp")
-target_link_libraries(${PROJECT_NAME}_node ${LIBRARIES})
-target_include_directories(${PROJECT_NAME}_node PUBLIC
+add_executable(robot_serial_node
+        src/robot_serial_node.cpp)
+ament_target_dependencies(robot_serial_node ${AMENT_DEPENDENCIES})
+rosidl_target_interfaces(robot_serial_node ${PROJECT_NAME} "rosidl_typesupport_cpp")
+target_link_libraries(robot_serial_node ${LIBRARIES})
+target_include_directories(robot_serial_node PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
         $<INSTALL_INTERFACE:include>)
+install(TARGETS robot_serial_node
+        DESTINATION lib/${PROJECT_NAME})
 
-install(TARGETS ${PROJECT_NAME}_node
+add_executable(openmv_serial_node
+        src/openmv_serial_node.cpp)
+ament_target_dependencies(openmv_serial_node ${AMENT_DEPENDENCIES})
+rosidl_target_interfaces(openmv_serial_node ${PROJECT_NAME} "rosidl_typesupport_cpp")
+target_link_libraries(openmv_serial_node ${LIBRARIES})
+target_include_directories(openmv_serial_node PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+        $<INSTALL_INTERFACE:include>)
+install(TARGETS openmv_serial_node
+        DESTINATION lib/${PROJECT_NAME})
+
+add_executable(qrcode_serial_node
+        src/qrcode_serial_node.cpp)
+ament_target_dependencies(qrcode_serial_node ${AMENT_DEPENDENCIES})
+rosidl_target_interfaces(qrcode_serial_node ${PROJECT_NAME} "rosidl_typesupport_cpp")
+target_link_libraries(qrcode_serial_node ${LIBRARIES})
+target_include_directories(qrcode_serial_node PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+        $<INSTALL_INTERFACE:include>)
+install(TARGETS qrcode_serial_node
+        DESTINATION lib/${PROJECT_NAME})
+
+install(TARGETS
+        robot_serial_node
+        openmv_serial_node
+        qrcode_serial_node
         DESTINATION lib/${PROJECT_NAME})
 
 install(TARGETS serialib

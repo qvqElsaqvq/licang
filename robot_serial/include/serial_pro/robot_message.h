@@ -10,21 +10,17 @@
 message_data Velocity{
     float v_x, v_y, v_w;
 };
-
-message_data map_data_t{
-    uint8_t intention;
-    uint16_t start_position_x;
-    uint16_t start_position_y;
-    int8_t delta_x[49];
-    int8_t delta_y[49];
-    uint16_t sender_id;
+message_data image_location_t{
+    int image_x;
+    int image_y;
 };
-message_data map_command_t{
-    float target_position_x;
-    float target_position_y;
-    uint8_t cmd_keyboard;
-    uint8_t target_robot_id;
-    uint16_t cmd_source;
+message_data decision_t{
+    uint8_t if_navigation;
+    uint8_t catch_decision;
+    uint8_t qrcode_number;
+};
+message_data qrcode_ball_t{
+    int qrcode_ball;
 };
 
 #endif //ROBOT_SERIAL_ROBOT_MESSAGE_H

@@ -1,0 +1,5 @@
+# robot_behavior_tree
+robot_behaviors包，robot_bt_navigator包和robot_msgs包为从nav2源码中摘出的包，0更改  
+robot_behavior_tree中存放自己写的决策，以插件形式存在  
+robot_bt_decision_maker为决策树总启动节点，每新增一个blackboard都要添加到其中  
+每新增一个插件都要添加到robot_bring_up的config中
