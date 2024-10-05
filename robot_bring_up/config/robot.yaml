@@ -23,7 +23,7 @@ obstacle_segmentation_node:
         obstacle_y_max: 100.0 # 障碍物的y最大值(livox坐标系)
         obstacle_z_min: -0.5 # 障碍物的z最小值(livox坐标系)
         obstacle_z_max: 0.2 # 障碍物的z最大值(livox坐标系)
-        obstacle_range_min: 0.8 # 障碍物的最小距离(livox坐标系)
+        obstacle_range_min: 0.4 # 障碍物的最小距离(livox坐标系)
         obstacle_range_max: 100.0 # 障碍物的最大距离(livox坐标系)
         point_frame: "livox"
 
@@ -115,10 +115,14 @@ robot_bt_decision_maker_node:
         tree_name: ["/behavior_trees/RMUC/RMUC_GUOSAI_1.xml","/behavior_trees/RMUC/RMUC_GUOSAI_red.xml"]
         plugin_lib_names:
             - nav2_keep_away_from_obstacles_action_bt_node
+            - nav2_navigate_to_pose_action_bt_node
+            - nav2_goal_reached_condition_bt_node
+            - nav2_goal_updated_condition_bt_node
+            - nav2_goal_updater_node_bt_node
             - nav2_user_force_success_decorator_bt_node
             - nav2_user_force_failure_decorator_bt_node
             - nav2_update_goal_action_bt_node
-            - nav2_goal_updated_condition_bt_node
+            - nav2_send_decision_action_bt_node
 robot_bt_decision_maker_node_rclcpp_node:
     ros__parameters:
         goal_reached_tol: 0.3 # 允许到目标位置的最终x和y的偏差（以米为单位），不考虑角度差
@@ -161,13 +165,13 @@ controller_server:
 
             # Robot
 
-            max_vel_x: 2.0 # 机器人最大x轴速度m/s
-            max_vel_y: 2.0 # 机器人最大y轴速度m/s
-            max_vel_x_backwards: 2.0 # 机器人最大x轴后退速度m/s
-            max_vel_theta: 2.0 # 机器人最大角速度rad/s
-            acc_lim_x: 3.0 # 机器人最大x轴平移加速度m/s^2
-            acc_lim_y: 3.0 # 机器人最大y轴平移加速度m/s^2
-            acc_lim_theta: 3.0 # 机器人最大角加速度rad/s^2
+            max_vel_x: 1.0 # 机器人最大x轴速度m/s
+            max_vel_y: 1.0 # 机器人最大y轴速度m/s
+            max_vel_x_backwards: 1.0 # 机器人最大x轴后退速度m/s
+            max_vel_theta: 1.0 # 机器人最大角速度rad/s
+            acc_lim_x: 2.0 # 机器人最大x轴平移加速度m/s^2
+            acc_lim_y: 2.0 # 机器人最大y轴平移加速度m/s^2
+            acc_lim_theta: 2.0 # 机器人最大角加速度rad/s^2
 
             is_footprint_dynamic: False
             footprint_model: # types: "point", "circular", "two_circles", "line", "polygon"

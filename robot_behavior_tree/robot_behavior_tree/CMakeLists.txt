@@ -26,6 +26,21 @@ set(dependencies
   geometry_msgs
 )
 
+add_library(nav2_keep_away_from_obstacles_action_bt_node SHARED plugins/action/keep_away_from_obstacles_action.cpp)
+list(APPEND plugin_libs nav2_keep_away_from_obstacles_action_bt_node)
+
+add_library(nav2_user_force_success_decorator_bt_node SHARED plugins/decorator/user_force_success.cpp)
+list(APPEND plugin_libs nav2_user_force_success_decorator_bt_node)
+
+add_library(nav2_user_force_failure_decorator_bt_node SHARED plugins/decorator/user_force_failure.cpp)
+list(APPEND plugin_libs nav2_user_force_failure_decorator_bt_node)
+
+add_library(nav2_update_goal_action_bt_node SHARED plugins/action/update_goal.cpp)
+list(APPEND plugin_libs nav2_update_goal_action_bt_node)
+
+add_library(nav2_send_decision_action_bt_node SHARED plugins/action/send_decision.cpp)
+list(APPEND plugin_libs nav2_send_decision_action_bt_node)
+
 foreach(bt_plugin ${plugin_libs})
   ament_target_dependencies(${bt_plugin} ${dependencies})
   target_compile_definitions(${bt_plugin} PRIVATE BT_PLUGIN_EXPORT)

@@ -11,8 +11,8 @@ message_data Velocity{
     float v_x, v_y, v_w;
 };
 message_data image_location_t{
-    int image_x;
-    int image_y;
+    uint8_t image_x;
+    uint8_t image_y;
 };
 message_data decision_t{
     uint8_t if_navigation;
@@ -20,7 +20,7 @@ message_data decision_t{
     uint8_t qrcode_number;
 };
 message_data qrcode_ball_t{
-    int qrcode_ball;
+    uint8_t qrcode_ball;
 };
 
 #endif //ROBOT_SERIAL_ROBOT_MESSAGE_H
