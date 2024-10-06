@@ -1,5 +1,3 @@
-#include <string>
-
 #include "robot_behavior_tree/plugins/action/send_decision.hpp"
 
 namespace nav2_behavior_tree

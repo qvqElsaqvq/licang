@@ -1,7 +1,6 @@
 #ifndef SEND_DECISION_HPP_
 #define SEND_DECISION_HPP_
 
-#include <string>
 #include <memory>
 #include <mutex>
 

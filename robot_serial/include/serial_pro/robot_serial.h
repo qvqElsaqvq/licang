@@ -21,6 +21,7 @@ private:
 
     rclcpp::Subscription<geometry_msgs::msg::Twist>::SharedPtr VelocitySubscription;
     rclcpp::Subscription<robot_serial::msg::Decision>::SharedPtr DecisionSubscription;
+    rclcpp::Publisher<robot_serial::msg::Robotstatus>::SharedPtr RobotStatusPublisher;
     
     void velocityCallback(const geometry_msgs::msg::Twist::SharedPtr msg){
         static uint8_t SOF = 0x00;
@@ -83,10 +84,19 @@ public:
             });
         }
 
+        warehouseSerial.registerCallback(0x0303, [this](const robot_status_t& msg){
+            robot_serial::msg::Robotstatus _Robotstatus;
+            _Robotstatus.is_adjust = msg.is_adjust;
+            _Robotstatus.is_receive_0x14 = msg.is_receive_0x14;
+            RCLCPP_INFO(get_logger(), "is_adjust: %d is_receive_0x14: %d", msg.is_adjust, msg.is_receive_0x14);
+            RobotStatusPublisher->publish(_Robotstatus);
+        });
+
         VelocitySubscription = create_subscription<geometry_msgs::msg::Twist>("/cmd_vel", 1, 
                         std::bind(&RobotSerial::velocityCallback, this, std::placeholders::_1));
         DecisionSubscription = create_subscription<robot_serial::msg::Decision>("/robot/decision", 1,
                         std::bind(&RobotSerial::decisionCallback, this, std::placeholders::_1));
+        RobotStatusPublisher = create_publisher<robot_serial::msg::Robotstatus>("/robot/robotstatus", 1);
 
         warehouseSerial.spin(true);
     }

@@ -5,5 +5,6 @@
 #include "robot_serial/msg/imagelocation.hpp"
 #include "robot_serial/msg/decision.hpp"
 #include "robot_serial/msg/qrcodeinfo.hpp"
+#include "robot_serial/msg/robotstatus.hpp"
 
 #endif //ROBOT_SERIAL_SENTRY_MSG_H

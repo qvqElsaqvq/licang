@@ -30,6 +30,7 @@ rosidl_generate_interfaces(${PROJECT_NAME}
         "msg/Transmit/Decision.msg"
         "msg/Receive/Imagelocation.msg"
         "msg/Receive/Qrcodeinfo.msg"
+        "msg/Receive/Robotstatus.msg"
         DEPENDENCIES std_msgs
 )
 
