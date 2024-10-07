@@ -12,9 +12,15 @@ namespace nav2_behavior_tree
         : BT::ConditionNode(condition_name, conf),
     {
         config().blackboard->get<rclcpp::Node::SharedPtr>("node",node_);
+        callback_group_ = node_->create_callback_group(rclcpp::CallbackGroupType::MutuallyExclusive, false);
+        callback_group_executor_.add_callback_group(callback_group_, node_->get_node_base_interface());
+
+        rclcpp::SubscriptionOptions sub_option;
+        sub_option.callback_group = callback_group_;
         decision_pub_ = node_->create_publisher<robot_serial::msg::Decision>("/robot/decision", 10);
         image_location_sub_ = node_->create_subscription<robot_serial::msg::Imagelocation>("/image_location", 10,
-                                    std::bind(&IfCatchBallCondition::imagelocationCallback, this, std::placeholders::_1));
+                                     std::bind(&IfCatchBallCondition::imagelocationCallback, this, std::placeholders::_1),
+                                     sub_option);
         getInput("image_x_threshold_min", image_x_threshold_min);
         getInput("image_x_threshold_max", image_x_threshold_max);
         getInput("image_y_threshold_min", image_y_threshold_min);
@@ -28,6 +34,8 @@ namespace nav2_behavior_tree
         getInput("image_y_threshold_min", image_y_threshold_min);
         getInput("image_y_threshold_max", image_y_threshold_max);
         robot_serial::msg::Decision decision;
+        callback_group_executor_.spin_some();
+
         if (image_x <= image_x_threshold_max && image_x >= image_x_threshold_min &&
             image_y <= image_y_threshold_max && image_y >= image_y_threshold_min)
         {

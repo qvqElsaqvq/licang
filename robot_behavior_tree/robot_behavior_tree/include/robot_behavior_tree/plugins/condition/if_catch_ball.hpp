@@ -68,6 +68,8 @@ namespace nav2_behavior_tree
         rclcpp::Publisher<robot_serial::msg::Decision>::SharedPtr decision_pub_;
         rclcpp::Subscription<robot_serial::msg::Imagelocation>::SharedPtr image_location_sub_;
         rclcpp::Node::SharedPtr node_;
+        rclcpp::CallbackGroup::SharedPtr callback_group_;
+        rclcpp::executors::SingleThreadedExecutor callback_group_executor_;
         void imagelocationCallback(const robot_serial::msg::Imagelocation::SharedPtr msg);
     };
 

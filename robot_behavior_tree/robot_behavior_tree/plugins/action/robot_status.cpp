@@ -32,9 +32,9 @@ namespace nav2_behavior_tree
 
     BT::NodeStatus RobotStatusAction::tick()
     {
+        callback_group_executor_.spin_some();
         config().blackboard->get<bool>("is_adjust", is_adjust);
         config().blackboard->get<bool>("is_receive_0x14", is_receive_0x14);
-        callback_group_executor_.spin_some();
 
         return BT::NodeStatus::SUCCESS;
     }
