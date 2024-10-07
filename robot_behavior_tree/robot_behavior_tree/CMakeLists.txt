@@ -50,11 +50,14 @@ list(APPEND plugin_libs nav2_send_qrcode_action_bt_node)
 add_library(nav2_if_adjust_condition_bt_node SHARED plugins/condition/if_adjust.cpp)
 list(APPEND plugin_libs nav2_if_adjust_condition_bt_node)
 
-add_library(nav2_if_receive_0x14_condition_bt_node SHARED plugins/condition/if_receive_0x14.cpp)
-list(APPEND plugin_libs nav2_if_receive_0x14_condition_bt_node)
+add_library(nav2_if_finish_condition_bt_node SHARED plugins/condition/if_finish.cpp)
+list(APPEND plugin_libs nav2_if_finish_condition_bt_node)
 
 add_library(nav2_if_catch_ball_condition_bt_node SHARED plugins/condition/if_catch_ball.cpp)
 list(APPEND plugin_libs nav2_if_catch_ball_condition_bt_node)
+
+add_library(nav2_is_goal_reached_condition_bt_node SHARED plugins/condition/is_goal_reached.cpp)
+list(APPEND plugin_libs nav2_is_goal_reached_condition_bt_node)
 
 foreach(bt_plugin ${plugin_libs})
   ament_target_dependencies(${bt_plugin} ${dependencies})

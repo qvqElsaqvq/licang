@@ -60,7 +60,7 @@ public:
         blackboard_->set<float>("pose_x",0.0);
         blackboard_->set<float>("pose_y",0.0);
         blackboard_->set<bool>("is_adjust",false);
-        blackboard_->set<bool>("is_receive_0x14",false);
+        blackboard_->set<bool>("is_finished",false);
         if(is_we_are_blue_)
         {
             blackboard_->set<float>("exchange_x",-4.11);
@@ -170,7 +170,7 @@ private:
                 blackboard->set<float>("pose_x",0.0);
                 blackboard->set<float>("pose_y",0.0);
                 blackboard->set<bool>("is_adjust",false);
-                blackboard->set<bool>("is_receive_0x14",false);
+                blackboard->set<bool>("is_finished",false);
                 if(is_we_are_blue_)
                 {
                     blackboard->set<float>("exchange_x",-4.11);

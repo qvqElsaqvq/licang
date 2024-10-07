@@ -13,11 +13,11 @@ namespace nav2_behavior_tree
         const BT::NodeConfiguration &conf)
         : BT::SyncActionNode(condition_name, conf),
         is_adjust(false),
-        is_receive_0x14(false)
+        is_finished(false)
     {
         node_ = config().blackboard->get<rclcpp::Node::SharedPtr>("node");
         config().blackboard->get<bool>("is_adjust", is_adjust);
-        config().blackboard->get<bool>("is_receive_0x14", is_receive_0x14);
+        config().blackboard->get<bool>("is_finished", is_finished);
         callback_group_ = node_->create_callback_group(rclcpp::CallbackGroupType::MutuallyExclusive, false);
         callback_group_executor_.add_callback_group(callback_group_, node_->get_node_base_interface());
 
@@ -34,7 +34,7 @@ namespace nav2_behavior_tree
     {
         callback_group_executor_.spin_some();
         config().blackboard->get<bool>("is_adjust", is_adjust);
-        config().blackboard->get<bool>("is_receive_0x14", is_receive_0x14);
+        config().blackboard->get<bool>("is_finished", is_finished);
 
         return BT::NodeStatus::SUCCESS;
     }
@@ -49,13 +49,13 @@ namespace nav2_behavior_tree
             is_adjust = true;
             config().blackboard->set<bool>("is_adjust", is_adjust);
         }
-        if(msg->is_receive_0x14 == 0x00){
-            is_receive_0x14 = false;
-            config().blackboard->set<bool>("is_receive_0x14", is_receive_0x14);
+        if(msg->is_finished == 0x00){
+            is_finished = false;
+            config().blackboard->set<bool>("is_finished", is_finished);
         }
-        else if(msg->is_receive_0x14 == 0x01){
-            is_receive_0x14 = true;
-            config().blackboard->set<bool>("is_receive_0x14", is_receive_0x14);
+        else if(msg->is_finished == 0x01){
+            is_finished = true;
+            config().blackboard->set<bool>("is_finished", is_finished);
         }
     }
 

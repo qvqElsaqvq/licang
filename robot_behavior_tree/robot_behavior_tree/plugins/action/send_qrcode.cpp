@@ -33,7 +33,7 @@ namespace nav2_behavior_tree
         return BT::NodeStatus::SUCCESS;
     }
 
-    void qrcodeCallback(const robot_serial::msg::Qrcodeinfo::SharedPtr msg){
+    void SendQrcodeAction::qrcodeCallback(const robot_serial::msg::Qrcodeinfo::SharedPtr msg){
         if(msg->qrcode_ball == 0x31){
             qrcode_number = 0x01;
         }

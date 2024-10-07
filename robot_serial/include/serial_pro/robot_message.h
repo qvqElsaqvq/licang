@@ -24,7 +24,7 @@ message_data qrcode_ball_t{
 };
 message_data robot_status_t{
     uint8_t is_adjust;
-    uint8_t is_receive_0x14;
+    uint8_t is_finished;
 };
 
 #endif //ROBOT_SERIAL_ROBOT_MESSAGE_H

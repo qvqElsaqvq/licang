@@ -87,8 +87,8 @@ public:
         warehouseSerial.registerCallback(0x0303, [this](const robot_status_t& msg){
             robot_serial::msg::Robotstatus _Robotstatus;
             _Robotstatus.is_adjust = msg.is_adjust;
-            _Robotstatus.is_receive_0x14 = msg.is_receive_0x14;
-            RCLCPP_INFO(get_logger(), "is_adjust: %d is_receive_0x14: %d", msg.is_adjust, msg.is_receive_0x14);
+            _Robotstatus.is_finished = msg.is_finished;
+            RCLCPP_INFO(get_logger(), "is_adjust: %d is_finished: %d", msg.is_adjust, msg.is_finished);
             RobotStatusPublisher->publish(_Robotstatus);
         });
 

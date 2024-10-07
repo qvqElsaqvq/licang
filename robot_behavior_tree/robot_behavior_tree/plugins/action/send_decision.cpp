@@ -29,6 +29,10 @@ namespace nav2_behavior_tree
         decision.qrcode_number = qrcode_number;
         decision.if_navigation = if_navigation;
         decision_pub_->publish(decision);
+        if(if_navigation == 0)
+            std::cout << "导航模式关" << std::endl;
+        else if(if_navigation == 1)
+            std::cout << "导航模式开" << std::endl;
 
         return BT::NodeStatus::SUCCESS;
     }

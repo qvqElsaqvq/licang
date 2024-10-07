@@ -1,0 +1,34 @@
+<root>
+    <TreeNodesModel>
+        <Condition ID="GoalReached">
+            <input_port name="global_frame">Reference frame</input_port>
+            <input_port name="goal">Destination</input_port>
+            <input_port name="robot_base_frame">Robot base frame</input_port>
+        </Condition>
+        <Condition ID="GoalUpdated"/>
+        <Condition ID="IsGoalUpdate">
+            <input_port name="goal" default="{goal}"/>
+        </Condition>
+        <Action ID="NavigateToPose">
+            <input_port name="goal" default="{goal}">Goal</input_port>
+        </Action>
+        <Action ID="UpdateGoal">
+            <output_port name="goal" default="{goal}"/>
+            <input_port name="position_x"/>
+            <input_port name="position_y"/>
+        </Action>
+        <Decorator ID="UserForceFailure"/>
+        <Decorator ID="UserForceSuccess"/>
+        <Condition ID="if_adjust"/>
+        <Condition ID="if_catch_ball"/>
+        <Condition ID="if_finish"/>
+        <Action ID="robot_status"/>
+        <Action ID="send_decision">
+            <input_port name="catch_decision"/>
+            <input_port name="if_navigation"/>
+            <input_port name="qrcode_number"/>
+        </Action>
+        <Action ID="send_qrcode"/>
+    </TreeNodesModel>
+</root>
+

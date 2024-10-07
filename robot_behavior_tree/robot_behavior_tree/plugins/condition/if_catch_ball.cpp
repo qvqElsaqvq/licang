@@ -9,7 +9,7 @@ namespace nav2_behavior_tree
     IfCatchBallCondition::IfCatchBallCondition(
         const std::string &condition_name,
         const BT::NodeConfiguration &conf)
-        : BT::ConditionNode(condition_name, conf),
+        : BT::ConditionNode(condition_name, conf)
     {
         config().blackboard->get<rclcpp::Node::SharedPtr>("node",node_);
         callback_group_ = node_->create_callback_group(rclcpp::CallbackGroupType::MutuallyExclusive, false);

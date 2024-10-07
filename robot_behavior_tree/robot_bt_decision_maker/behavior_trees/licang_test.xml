@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<root main_tree_to_execute="BehaviorTree">
+    <!-- ////////// -->
+    <BehaviorTree ID="BehaviorTree">
+        <ReactiveSequence>
+            <Decorator ID="UserForceSuccess">
+                <ReactiveFallback>
+                    <Condition ID="IsGoalUpdate" goal="{goal}"/>
+                    <Action ID="NavigateToPose" goal="{goal}"/>
+                </ReactiveFallback>
+            </Decorator>
+            <ReactiveSequence>
+                <ForceSuccess>
+                    <Action ID="send_decision" catch_decision="0" if_navigation="1" qrcode_number="0"/>
+                </ForceSuccess>
+                <Action ID="UpdateGoal" goal="{goal}" position_x="1.0" position_y="0.0"/>
+            </ReactiveSequence>
+            <ReactiveSequence>
+                <Condition ID="GoalReached" global_frame="map" goal="{goal}" robot_base_frame="livox"/>
+                <Action ID="UpdateGoal" goal="{goal}" position_x="3.0" position_y="0.0"/>
+            </ReactiveSequence>
+            <ReactiveSequence>
+                <Condition ID="GoalReached" global_frame="map" goal="{goal}" robot_base_frame="livox"/>
+                <Action ID="send_decision" catch_decision="0" if_navigation="0" qrcode_number="0"/>
+            </ReactiveSequence>
+        </ReactiveSequence>
+    </BehaviorTree>
+    <!-- ////////// -->
+    <TreeNodesModel>
+        <Condition ID="GoalReached">
+            <input_port name="global_frame">Reference frame</input_port>
+            <input_port name="goal">Destination</input_port>
+            <input_port name="robot_base_frame">Robot base frame</input_port>
+        </Condition>
+        <Condition ID="GoalUpdated"/>
+        <Condition ID="IsGoalUpdate">
+            <input_port default="{goal}" name="goal"/>
+        </Condition>
+        <Action ID="NavigateToPose">
+            <input_port default="{goal}" name="goal">Goal</input_port>
+        </Action>
+        <Action ID="UpdateGoal">
+            <output_port default="{goal}" name="goal"/>
+            <input_port name="position_x"/>
+            <input_port name="position_y"/>
+        </Action>
+        <Decorator ID="UserForceFailure"/>
+        <Decorator ID="UserForceSuccess"/>
+        <Condition ID="if_adjust"/>
+        <Condition ID="if_catch_ball"/>
+        <Condition ID="if_finish"/>
+        <Action ID="robot_status"/>
+        <Action ID="send_decision">
+            <input_port name="catch_decision"/>
+            <input_port name="if_navigation"/>
+            <input_port name="qrcode_number"/>
+        </Action>
+        <Action ID="send_qrcode"/>
+    </TreeNodesModel>
+    <!-- ////////// -->
+</root>

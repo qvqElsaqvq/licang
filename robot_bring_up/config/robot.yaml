@@ -111,8 +111,8 @@ robot_bt_decision_maker_node:
         loop_duration_in_millisec: 100
         server_timeout_in_millisec: 1000
         transform_tolerance: 0.15
-        bt_xml_filename: "/behavior_trees/RMUC/RMUC_GUOSAI_1.xml"
-        tree_name: ["/behavior_trees/RMUC/RMUC_GUOSAI_1.xml","/behavior_trees/RMUC/RMUC_GUOSAI_red.xml"]
+        bt_xml_filename: "/behavior_trees/licang_test.xml"
+        tree_name: ["/behavior_trees/licang_test.xml"]
         plugin_lib_names:
             - nav2_keep_away_from_obstacles_action_bt_node
             - nav2_navigate_to_pose_action_bt_node
