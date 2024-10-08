@@ -1,6 +1,6 @@
 [submodule "point_lio_ros2"]
 	path = point_lio_ros2
-	url = git@github.com:qvqElsaqvq/point-lio.git
+	url = https://github.com/qvqElsaqvq/point-lio.git
 [submodule "costmap_converter"]
 	path = costmap_converter
 	url = https://github.com/qvqElsaqvq/costmap_converter.git
