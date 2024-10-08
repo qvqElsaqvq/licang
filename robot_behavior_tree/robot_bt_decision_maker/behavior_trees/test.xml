@@ -3,10 +3,11 @@
     <!-- ////////// -->
     <BehaviorTree ID="BehaviorTree">
         <ReactiveSequence>
-            <ReactiveFallback>
-                <Condition ID="IsGoalUpdate" goal="{goal}"/>
-                <Action ID="NavigateToPose" goal="{goal}"/>
-            </ReactiveFallback>
+            <Decorator ID="UserForceSuccess">
+                <ReactiveFallback>
+                    <Condition ID="IsGoalUpdate" goal="{goal}"/>
+                </ReactiveFallback>
+            </Decorator>
             <ReactiveSequence>
                 <Action ID="SendDecision" catch_decision="0" if_navigation="1" qrcode_number="0"/>
                 <Action ID="UpdateGoal" goal="{goal}" position_x="0.4" position_y="0.4"/>

@@ -91,7 +91,7 @@ BtNavigator::BtNavigator(rclcpp::NodeOptions options)
   declare_parameter_if_not_declared(
     this, "global_frame", rclcpp::ParameterValue(std::string("map")));
   declare_parameter_if_not_declared(
-    this, "robot_base_frame", rclcpp::ParameterValue(std::string("base_link")));
+    this, "robot_base_frame", rclcpp::ParameterValue(std::string("livox")));
   declare_parameter_if_not_declared(
     this, "odom_topic", rclcpp::ParameterValue(std::string("odom")));
 }

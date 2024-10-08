@@ -23,6 +23,9 @@ public:
         bt_loop_duration_ = std::chrono::milliseconds(loop_duration_in_millisec_);
         this->declare_parameter("server_timeout_in_millisec", 100);
         this->get_parameter("server_timeout_in_millisec", server_timeout_in_millisec_);
+        this->declare_parameter("wait_for_service_timeout_in_millisec_", 100);
+        this->get_parameter("wait_for_service_timeout_in_millisec_", wait_for_service_timeout_in_millisec_);
+        wait_for_service_timeout_ = std::chrono::milliseconds(wait_for_service_timeout_in_millisec_);
         server_timeout_ = std::chrono::milliseconds(server_timeout_in_millisec_);
         this->declare_parameter("plugin_lib_names", std::vector<std::string>());
         this->get_parameter("plugin_lib_names", plugin_lib_names_);
@@ -42,7 +45,6 @@ public:
         pose.pose.orientation.y = 0.0;
         pose.pose.orientation.z = -1.0;
         pose.pose.orientation.w = 0.0;
-        auto duration1 = std::chrono::milliseconds(50); // 50毫秒
         client_node_name_ = this->get_name();
         auto options = rclcpp::NodeOptions().arguments(
             {"--ros-args",
@@ -64,6 +66,7 @@ public:
         //Put items on the blackboard
         blackboard_->set<rclcpp::Node::SharedPtr>("node", client_node_);                    // NOLINT
         blackboard_->set<std::chrono::milliseconds>("server_timeout", server_timeout_);     // NOLINT
+        blackboard_->set<std::chrono::milliseconds>("wait_for_service_timeout", wait_for_service_timeout_);
         blackboard_->set<std::chrono::milliseconds>("bt_loop_duration", bt_loop_duration_); // NOLINT
         blackboard_->set<std::shared_ptr<tf2_ros::Buffer>>("tf_buffer", tfbuffer_);         // NOLINT
         blackboard_->set<bool>("is_we_are_blue", is_we_are_blue_);
@@ -136,6 +139,7 @@ private:
     // Parameters
     int loop_duration_in_millisec_;
     int server_timeout_in_millisec_;
+    int wait_for_service_timeout_in_millisec_;
     std::vector<std::string> plugin_lib_names_;
     std::string bt_xml_filename_;
     bool is_we_are_blue_;
@@ -145,6 +149,7 @@ private:
     BT::Blackboard::Ptr blackboard_;
     std::chrono::milliseconds bt_loop_duration_;
     std::chrono::milliseconds server_timeout_;
+    std::chrono::milliseconds wait_for_service_timeout_;
     std::string client_node_name_;
     rclcpp::Node::SharedPtr client_node_;
     std::shared_ptr<tf2_ros::Buffer> tfbuffer_;
@@ -176,6 +181,7 @@ private:
             {
                 blackboard->set<rclcpp::Node::SharedPtr>("node", client_node_);                    // NOLINT
                 blackboard->set<std::chrono::milliseconds>("server_timeout", server_timeout_);     // NOLINT
+                blackboard->set<std::chrono::milliseconds>("wait_for_service_timeout", wait_for_service_timeout_);
                 blackboard->set<std::chrono::milliseconds>("bt_loop_duration", bt_loop_duration_); // NOLINT
                 blackboard->set<std::shared_ptr<tf2_ros::Buffer>>("tf_buffer", tfbuffer_);         // NOLINT
                 blackboard->set<bool>("is_we_are_blue", is_we_are_blue_);
