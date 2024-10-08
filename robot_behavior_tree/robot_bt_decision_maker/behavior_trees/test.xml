@@ -6,16 +6,91 @@
             <Decorator ID="UserForceSuccess">
                 <ReactiveFallback>
                     <Condition ID="IsGoalUpdate" goal="{goal}"/>
+                    <Action ID="NavigateToPose" goal="{goal}"/>
                 </ReactiveFallback>
             </Decorator>
-            <ReactiveSequence>
-                <Action ID="SendDecision" catch_decision="0" if_navigation="1" qrcode_number="0"/>
-                <Action ID="UpdateGoal" goal="{goal}" position_x="0.4" position_y="0.4"/>
-            </ReactiveSequence>
+            <ForceSuccess>
+                <ReactiveSequence>
+                    <Condition ID="IfMatchFinish"/>
+                    <Action ID="UpdateGoal" goal="{goal}" position_x="0.0" position_y="0.0"/>
+                </ReactiveSequence>
+            </ForceSuccess>
+            <Decorator ID="UserForceSuccess">
+                <ReactiveSequence>
+                    <Condition ID="IfNavigation"/>
+                    <Switch5 case_1="avoid" case_2="rotating" case_3="platform" case_4="column" case_5="warehouse" variable="{cmd_status}">
+                        <ForceSuccess>
+                            <Action ID="UpdateGoal" goal="{goal}" position_x="0.2" position_y="0.2"/>
+                        </ForceSuccess>
+                        <ForceSuccess>
+                            <Action ID="UpdateGoal" goal="{goal}" position_x="0.3" position_y="0.0"/>
+                        </ForceSuccess>
+                        <ForceSuccess>
+                            <Action ID="UpdateGoal" goal="{goal}" position_x="-0.2" position_y="0.0"/>
+                        </ForceSuccess>
+                        <ForceSuccess>
+                            <Action ID="UpdateGoal" goal="{goal}" position_x="-0.3" position_y="0.1"/>
+                        </ForceSuccess>
+                        <ForceSuccess>
+                            <Action ID="UpdateGoal" goal="{goal}" position_x="0.0" position_y="0.2"/>
+                        </ForceSuccess>
+                        <ForceSuccess>
+                            <Action ID="Printf" txt="方式无效"/>
+                        </ForceSuccess>
+                    </Switch5>
+                </ReactiveSequence>
+            </Decorator>
+            <Decorator ID="UserForceSuccess">
+                <ReactiveSequence>
+                    <Condition ID="IsGoalReached" goal="{goal}"/>
+                    <Switch5 case_1="avoid" case_2="rotating" case_3="platform" case_4="column" case_5="warehouse" variable="{cmd_status}">
+                        <Action ID="ChangeGoal" current_decision="1"/>
+                        <ReactiveSequence>
+                            <Action ID="SendDecision" catch_decision="0" if_navigation="0" qrcode_number="0"/>
+                            <Condition ID="IfAdjust"/>
+                            <Repeat num_cycles="20">
+                                <Condition ID="IfCatchBall" image_x_threshold_max="100" image_x_threshold_min="0" image_y_threshold_max="100" image_y_threshold_min="0"/>
+                            </Repeat>
+                            <Action ID="SendDecision" catch_decision="0" if_navigation="1" qrcode_number="0"/>
+                            <Action ID="ChangeGoal" current_decision="2"/>
+                        </ReactiveSequence>
+                        <ReactiveSequence>
+                            <Action ID="SendDecision" catch_decision="0" if_navigation="0" qrcode_number="0"/>
+                            <Condition ID="IfAdjust"/>
+                            <Condition ID="IfCatchBall" image_x_threshold_max="100" image_x_threshold_min="0" image_y_threshold_max="100" image_y_threshold_min="0"/>
+                            <Condition ID="IfFinish"/>
+                            <Action ID="SendDecision" catch_decision="0" if_navigation="1" qrcode_number="0"/>
+                            <Action ID="ChangeGoal" current_decision="3"/>
+                        </ReactiveSequence>
+                        <ReactiveSequence>
+                            <Action ID="SendDecision" catch_decision="0" if_navigation="0" qrcode_number="0"/>
+                            <Condition ID="IfAdjust"/>
+                            <Condition ID="IfCatchBall" image_x_threshold_max="100" image_x_threshold_min="0" image_y_threshold_max="100" image_y_threshold_min="0"/>
+                            <Condition ID="IfFinish"/>
+                            <Action ID="SendDecision" catch_decision="0" if_navigation="1" qrcode_number="0"/>
+                            <Action ID="ChangeGoal" current_decision="4"/>
+                        </ReactiveSequence>
+                        <ReactiveSequence>
+                            <Action ID="SendDecision" catch_decision="0" if_navigation="0" qrcode_number="0"/>
+                            <Condition ID="IfAdjust"/>
+                            <Action ID="SendQrcode"/>
+                            <Condition ID="IfFinish"/>
+                            <Action ID="SendDecision" catch_decision="0" if_navigation="1" qrcode_number="0"/>
+                            <Action ID="MatchStatus"/>
+                        </ReactiveSequence>
+                        <ForceSuccess>
+                            <Action ID="Printf" txt="方式无效"/>
+                        </ForceSuccess>
+                    </Switch5>
+                </ReactiveSequence>
+            </Decorator>
         </ReactiveSequence>
     </BehaviorTree>
     <!-- ////////// -->
     <TreeNodesModel>
+        <Action ID="ChangeGoal">
+            <input_port name="current_decision"/>
+        </Action>
         <Condition ID="GoalReached">
             <input_port name="global_frame">Reference frame</input_port>
             <input_port name="goal">Destination</input_port>
@@ -30,14 +105,20 @@
             <input_port name="image_y_threshold_min"/>
         </Condition>
         <Condition ID="IfFinish"/>
+        <Condition ID="IfMatchFinish"/>
+        <Condition ID="IfNavigation"/>
         <Condition ID="IsGoalReached">
             <input_port name="goal"/>
         </Condition>
         <Condition ID="IsGoalUpdate">
             <input_port default="{goal}" name="goal"/>
         </Condition>
+        <Action ID="MatchStatus"/>
         <Action ID="NavigateToPose">
             <input_port default="{goal}" name="goal">Goal</input_port>
+        </Action>
+        <Action ID="Printf">
+            <input_port name="txt"/>
         </Action>
         <Action ID="RobotStatus"/>
         <Action ID="SendDecision">

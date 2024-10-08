@@ -47,6 +47,15 @@ list(APPEND plugin_libs nav2_robot_status_action_bt_node)
 add_library(nav2_send_qrcode_action_bt_node SHARED plugins/action/send_qrcode.cpp)
 list(APPEND plugin_libs nav2_send_qrcode_action_bt_node)
 
+add_library(nav2_change_goal_action_bt_node SHARED plugins/action/change_goal.cpp)
+list(APPEND plugin_libs nav2_change_goal_action_bt_node)
+
+add_library(nav2_printf_action_bt_node SHARED plugins/action/printf.cpp)
+list(APPEND plugin_libs nav2_printf_action_bt_node)
+
+add_library(nav2_match_status_action_bt_node SHARED plugins/action/match_status.cpp)
+list(APPEND plugin_libs nav2_match_status_action_bt_node)
+
 add_library(nav2_if_adjust_condition_bt_node SHARED plugins/condition/if_adjust.cpp)
 list(APPEND plugin_libs nav2_if_adjust_condition_bt_node)
 
@@ -61,6 +70,12 @@ list(APPEND plugin_libs nav2_is_goal_reached_condition_bt_node)
 
 add_library(nav2_is_goal_update_condition_bt_node SHARED plugins/condition/is_goal_update.cpp)
 list(APPEND plugin_libs nav2_is_goal_update_condition_bt_node)
+
+add_library(nav2_if_navigation_condition_bt_node SHARED plugins/condition/if_navigation.cpp)
+list(APPEND plugin_libs nav2_if_navigation_condition_bt_node)
+
+add_library(nav2_if_match_finish_condition_bt_node SHARED plugins/condition/if_match_finish.cpp)
+list(APPEND plugin_libs nav2_if_match_finish_condition_bt_node)
 
 foreach(bt_plugin ${plugin_libs})
   ament_target_dependencies(${bt_plugin} ${dependencies})

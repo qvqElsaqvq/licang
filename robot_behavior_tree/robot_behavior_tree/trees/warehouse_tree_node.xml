@@ -1,5 +1,8 @@
 <root>
     <TreeNodesModel>
+        <Action ID="ChangeGoal">
+            <input_port name="current_decision"/>
+        </Action>
         <Condition ID="GoalReached">
             <input_port name="global_frame">Reference frame</input_port>
             <input_port name="goal">Destination</input_port>
@@ -14,14 +17,20 @@
             <input_port name="image_y_threshold_min"/>
         </Condition>
         <Condition ID="IfFinish"/>
+        <Condition ID="IfMatchFinish"/>
+        <Condition ID="IfNavigation"/>
         <Condition ID="IsGoalReached">
             <input_port name="goal"/>
         </Condition>
         <Condition ID="IsGoalUpdate">
             <input_port name="goal" default="{goal}"/>
         </Condition>
+        <Action ID="MatchStatus"/>
         <Action ID="NavigateToPose">
             <input_port name="goal" default="{goal}">Goal</input_port>
+        </Action>
+        <Action ID="Printf">
+            <input_port name="txt"/>
         </Action>
         <Action ID="RobotStatus"/>
         <Action ID="SendDecision">

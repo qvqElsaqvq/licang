@@ -196,11 +196,16 @@ robot_bt_decision_maker_node:
             - nav2_send_decision_action_bt_node
             - nav2_robot_status_action_bt_node
             - nav2_send_qrcode_action_bt_node
+            - nav2_change_goal_action_bt_node
+            - nav2_printf_action_bt_node
+            - nav2_match_status_action_bt_node
             - nav2_if_adjust_condition_bt_node
             - nav2_if_finish_condition_bt_node
             - nav2_if_catch_ball_condition_bt_node
             - nav2_is_goal_reached_condition_bt_node
             - nav2_is_goal_update_condition_bt_node
+            - nav2_if_navigation_condition_bt_node
+            - nav2_if_match_finish_condition_bt_node
 robot_bt_decision_maker_node_rclcpp_node:
     ros__parameters:
         goal_reached_tol: 0.3 # 允许到目标位置的最终x和y的偏差（以米为单位），不考虑角度差
@@ -243,13 +248,13 @@ controller_server:
 
             # Robot
 
-            max_vel_x: 1.0 # 机器人最大x轴速度m/s
-            max_vel_y: 1.0 # 机器人最大y轴速度m/s
-            max_vel_x_backwards: 1.0 # 机器人最大x轴后退速度m/s
-            max_vel_theta: 1.0 # 机器人最大角速度rad/s
-            acc_lim_x: 2.0 # 机器人最大x轴平移加速度m/s^2
-            acc_lim_y: 2.0 # 机器人最大y轴平移加速度m/s^2
-            acc_lim_theta: 2.0 # 机器人最大角加速度rad/s^2
+            max_vel_x: 0.2 # 机器人最大x轴速度m/s
+            max_vel_y: 0.2 # 机器人最大y轴速度m/s
+            max_vel_x_backwards: 0.1 # 机器人最大x轴后退速度m/s
+            max_vel_theta: 0.5 # 机器人最大角速度rad/s
+            acc_lim_x: 1.0 # 机器人最大x轴平移加速度m/s^2
+            acc_lim_y: 1.0 # 机器人最大y轴平移加速度m/s^2
+            acc_lim_theta: 1.0 # 机器人最大角加速度rad/s^2
 
             is_footprint_dynamic: False
             footprint_model: # types: "point", "circular", "two_circles", "line", "polygon"

@@ -12,6 +12,7 @@ namespace nav2_behavior_tree
         qrcode_number(0)
     {
         config().blackboard->get<rclcpp::Node::SharedPtr>("node",node_ );
+        config().blackboard->set<int>("if_navigation",if_navigation );
         decision_pub_ = node_->create_publisher<robot_serial::msg::Decision>("/robot/decision", 10);
         getInput("if_navigation",if_navigation);
         getInput("catch_decision",catch_decision);
@@ -23,6 +24,7 @@ namespace nav2_behavior_tree
         getInput("if_navigation",if_navigation);
         getInput("catch_decision",catch_decision);
         getInput("qrcode_number",qrcode_number);
+        config().blackboard->set<int>("if_navigation",if_navigation);
         robot_serial::msg::Decision decision;
 
         decision.catch_decision = catch_decision;;

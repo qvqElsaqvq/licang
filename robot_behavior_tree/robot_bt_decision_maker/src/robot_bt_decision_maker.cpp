@@ -76,6 +76,9 @@ public:
         blackboard_->set<bool>("is_finished",false);
         blackboard_->set<geometry_msgs::msg::PoseStamped>("goal",pose);
         blackboard_->set<bool>("is_goal_reached",false);
+        blackboard_->set<std::string>("cmd_status", "avoid");
+        blackboard_->set<int>("if_navigation",1);
+        blackboard_->set<bool>("is_match_finish", false);
         if(is_we_are_blue_)
         {
             blackboard_->set<float>("exchange_x",-4.11);
@@ -191,6 +194,9 @@ private:
                 blackboard->set<bool>("is_finished",false);
                 blackboard->set<geometry_msgs::msg::PoseStamped>("goal",pose);
                 blackboard->set<bool>("is_goal_reached",false);
+                blackboard->set<std::string>("cmd_status", "avoid");
+                blackboard->set<int>("if_navigation",1);
+                blackboard->set<bool>("is_match_finish", false);
                 if(is_we_are_blue_)
                 {
                     blackboard->set<float>("exchange_x",-4.11);
