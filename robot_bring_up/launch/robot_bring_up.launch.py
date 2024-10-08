@@ -16,8 +16,9 @@ def generate_launch_description():
 
     if_rviz = True
     if_sim = False
+    if_map = False  # 只启动雷达驱动、point-lio
 
-    fast_lio_path = get_package_share_directory("fast_lio")
+    point_lio_launch = get_package_share_directory("point_lio")
     robot_bring_up_path = get_package_share_directory("robot_bring_up")
     init_transform_path = get_package_share_directory("map_odom_pub")
     obstacle_segmentation_path = get_package_share_directory("obstacle_segmentation")
@@ -25,6 +26,12 @@ def generate_launch_description():
     yaml_path = os.path.join(robot_bring_up_path, "config", "robot.yaml")
     nav2_bringup_dir = get_package_share_directory("nav2_bringup") #nav2_bringup功能包
 
+    param_if_map = LaunchConfiguration("if_map", default=if_map)
+    declare_if_map = DeclareLaunchArgument(
+        "if_map",
+        default_value=param_if_map,
+        description="Whether to run map",
+    )
     param_yaml_path = LaunchConfiguration("params_file", default=yaml_path)
     declare_yaml_path = DeclareLaunchArgument(
         "params_file",
@@ -57,9 +64,9 @@ def generate_launch_description():
             [livox_driver_path, "/launch_ROS2", "/msg_MID360_launch.py"]
         ),
     )
-    fast_lio_launch = IncludeLaunchDescription(
+    point_lio_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
-            [fast_lio_path, "/launch", "/mapping.launch.py"]
+            [point_lio_launch, "/launch", "/mapping_autostart.launch.py"]
         ),
         launch_arguments={
             "params_file": param_yaml_path,
@@ -73,7 +80,7 @@ def generate_launch_description():
         launch_arguments={
             "param_dir": param_yaml_path,
         }.items(),
-        #condition=UnlessCondition(param_if_map),
+        condition=UnlessCondition(param_if_map),
     )
     obstacle_segmentation_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
@@ -82,7 +89,7 @@ def generate_launch_description():
         launch_arguments={
             "params_file": param_yaml_path,
         }.items(),
-        #condition=UnlessCondition(param_if_map),
+        condition=UnlessCondition(param_if_map),
     )
     navigation_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
@@ -92,7 +99,7 @@ def generate_launch_description():
             "params_file": param_yaml_path,
             "use_sim_time": param_launch_gazebo,
         }.items(),
-        #condition=UnlessCondition(param_if_map),
+        condition=UnlessCondition(param_if_map),
     )
     rviz_node = Node(
         package="rviz2",
@@ -109,15 +116,21 @@ def generate_launch_description():
             declare_yaml_path,
             declare_rviz_config_dir,
             declare_launch_rviz,
+            declare_if_map,
             livox_driver_launch,
-            obstacle_segmentation_launch,
-            init_transform_launch,
+            navigation_launch,
+            #init_transform_launch,
             rviz_node,
+            TimerAction(
+                period=10.0,
+                actions=[
+                    point_lio_launch
+                ],
+            ),
             TimerAction(
                 period=5.0,
                 actions=[
-                    navigation_launch,
-                    fast_lio_launch
+                    obstacle_segmentation_launch
                 ],
             )
             ]

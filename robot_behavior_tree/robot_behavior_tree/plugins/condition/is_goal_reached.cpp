@@ -40,7 +40,7 @@ namespace nav2_behavior_tree
         // tf2::Matrix3x3 euler(quaternion);
         // double roll, pitch, yaw;
         // euler.getRPY(roll, pitch, yaw);
-        if((fabs(current_goal.pose.position.x - current_pose.pose.position.x) <= 0.2)&&(fabs(current_goal.pose.position.y - current_pose.pose.position.y) <= 0.2))
+        if((fabs(current_goal.pose.position.x - current_pose.pose.position.x) <= 0.1)&&(fabs(current_goal.pose.position.y - current_pose.pose.position.y) <= 0.1))
         {
             is_goal_reached = true;
             config().blackboard->set<bool>("is_goal_reached",is_goal_reached);

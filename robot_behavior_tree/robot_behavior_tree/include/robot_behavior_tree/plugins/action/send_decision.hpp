@@ -38,16 +38,16 @@ namespace nav2_behavior_tree
         static BT::PortsList providedPorts()
         {
             return {
-                BT::InputPort<uint8_t>("if_navigation", "if is navigating"),
-                BT::InputPort<uint8_t>("catch_decision", "if need catch ball"),
-                BT::InputPort<uint8_t>("qrcode_number", "the number of qrcode"),
+                BT::InputPort<int>("if_navigation", "if is navigating"),
+                BT::InputPort<int>("catch_decision", "if need catch ball"),
+                BT::InputPort<int>("qrcode_number", "the number of qrcode"),
             };
         }
 
     private:
-        uint8_t if_navigation;   //是否在导航模式，0为不在，1为在
-        uint8_t  catch_decision; //是否拨球，0为不拨，1为拨
-        uint8_t qrcode_number;   //二维码识别到的数字
+        int if_navigation;   //是否在导航模式，0为不在，1为在
+        int  catch_decision; //是否拨球，0为不拨，1为拨
+        int qrcode_number;   //二维码识别到的数字
         rclcpp::Publisher<robot_serial::msg::Decision>::SharedPtr decision_pub_;
         rclcpp::Node::SharedPtr node_;
     };

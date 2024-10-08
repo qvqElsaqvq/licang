@@ -1,0 +1,18 @@
+pcd2pgm_node:
+    ros__parameters:
+        pcd_path: "/home/sentry/auto_sentry2024/src/auto_sentry2024/point_lio_ros2/point_lio/PCD"
+        pcd_name: "scans.pcd" 
+        map_path: "/home/sentry/auto_sentry2024/src/auto_sentry2024/robot_bring_up/maps"
+        map_name: "test_map82.png"
+        yaml_name: "test_map8.yaml"
+        thre_x_min: -50.0 # 点云范围
+        thre_x_max: 50.0 # 点云范围
+        thre_y_min: -50.0 # 点云范围
+        thre_y_max: 50.0 # 点云范围
+        thre_z_min: -0.2 # 点云范围 需要排除地面影响
+        thre_z_max: 1.0 # 点云范围 需要排除天花板影响
+        thre_radius: 0.05 # 半径阈值，用于排除离群的点
+        map_resolution: 0.05 # 地图分辨率，m
+        thre_point_count: 30 # 半径内点的数量阈值，用于排除离群的点
+        occupied_thresh: 0.65 # 占据阈值
+        free_thresh: 0.196 # 空闲阈值

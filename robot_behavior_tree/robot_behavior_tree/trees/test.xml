@@ -1,4 +1,13 @@
-<root>
+<?xml version="1.0"?>
+<root main_tree_to_execute="BehaviorTree">
+    <!-- ////////// -->
+    <BehaviorTree ID="BehaviorTree">
+        <ReactiveSequence>
+            <Action ID="SendDecision" catch_decision="0" if_navigation="1" qrcode_number="0"/>
+            <Action ID="UpdateGoal" goal="{goal}" position_x="1.0" position_y="1.0"/>
+        </ReactiveSequence>
+    </BehaviorTree>
+    <!-- ////////// -->
     <TreeNodesModel>
         <Condition ID="GoalReached">
             <input_port name="global_frame">Reference frame</input_port>
@@ -18,10 +27,10 @@
             <input_port name="goal"/>
         </Condition>
         <Condition ID="IsGoalUpdate">
-            <input_port name="goal" default="{goal}"/>
+            <input_port default="{goal}" name="goal"/>
         </Condition>
         <Action ID="NavigateToPose">
-            <input_port name="goal" default="{goal}">Goal</input_port>
+            <input_port default="{goal}" name="goal">Goal</input_port>
         </Action>
         <Action ID="RobotStatus"/>
         <Action ID="SendDecision">
@@ -31,12 +40,12 @@
         </Action>
         <Action ID="SendQrcode"/>
         <Action ID="UpdateGoal">
-            <output_port name="goal" default="{goal}"/>
+            <output_port default="{goal}" name="goal"/>
             <input_port name="position_x"/>
             <input_port name="position_y"/>
         </Action>
         <Decorator ID="UserForceFailure"/>
         <Decorator ID="UserForceSuccess"/>
     </TreeNodesModel>
+    <!-- ////////// -->
 </root>
-

@@ -1,6 +1,6 @@
 map_server:
     ros__parameters:
-        yaml_filename: "/home/sentry111/licang_ws/src/licang/robot_bring_up/maps/drone.yaml"
+        yaml_filename: "/home/sentry111/licang_ws/src/licang/robot_bring_up/maps/test.yaml"
 
 map_odom_pub_node:
     ros__parameters:
@@ -23,63 +23,133 @@ obstacle_segmentation_node:
         obstacle_y_max: 100.0 # 障碍物的y最大值(livox坐标系)
         obstacle_z_min: -0.5 # 障碍物的z最小值(livox坐标系)
         obstacle_z_max: 0.2 # 障碍物的z最大值(livox坐标系)
-        obstacle_range_min: 0.4 # 障碍物的最小距离(livox坐标系)
+        obstacle_range_min: 0.2 # 障碍物的最小距离(livox坐标系)
         obstacle_range_max: 100.0 # 障碍物的最大距离(livox坐标系)
         point_frame: "livox"
 
+## PCD转二维栅格地图
+pcd2pgm_node:
+    ros__parameters:
+        pcd_path: "/home/sentry111/licang_ws/src/licang/point_lio_ros2/point_lio/PCD" # 点云路径
+        pcd_name: "2024_10_08_07_37_59_1.pcd"
+        map_path: "/home/sentry111/licang_ws/src/licang/robot_bring_up/maps"
+        map_name: "test.png"
+        yaml_name: "test.yaml"
+        method: "point" # normal、height或者point，代表不同的转换方法
+        thre_x_min: -50.0 # 点云范围
+        thre_x_max: 50.0 # 点云范围
+        thre_y_min: -50.0 # 点云范围
+        thre_y_max: 50.0 # 点云范围
+        thre_z_min: -0.56 # 点云范围 point方法需要排除地面影响
+        thre_z_max: 1.2 # 点云范围 point方法需要排除天花板影响
+        thre_radius: 0.05 # 半径阈值，用于排除离群的点
+        map_resolution: 0.05 # 地图分辨率，m
+        thre_point_count: 30 # 半径内点的数量阈值，用于排除离群的点
+        occupied_thresh: 0.65 # 占据阈值
+        free_thresh: 0.196 # 空闲阈值
+        point_num_for_normal: 50 # 用于计算法向量的点的数量
+        leaf_size: 0.1 # 体素滤波器的体素大小，只与normal方法有关
+        angle_threshold: 1.0 # 法向量与地面夹角的角度阈值(弧度制)，只与normal方法有关
+        height_threshold: 0.05 # 高度阈值，只与height方法有关
+        point_num_for_statistical: 100 # 用于统计滤波的点的数量
+        standard_deviation_multiplier: 1.0 # 标准差倍数
+
 laserMapping:
     ros__parameters:
-        feature_extract_enable: false
-        point_filter_num: 3
-        max_iteration: 3
-        filter_size_surf: 0.5
-        filter_size_map: 0.5
-        cube_side_length: 1000.0
-        runtime_pos_log_enable: false
-        map_file_path: "./test.pcd"
-
         common:
             lid_topic:  "/livox/lidar" # 接收的雷达数据的topic，消息类型为CustomMsg
             imu_topic:  "/livox/imu" # 接收的IMU数据的topic，消息类型为sensor_msgs::Imu
-            time_sync_en: true         # ONLY turn on when external time synchronization is really not possible
-            time_offset_lidar_to_imu: 0.0 # Time offset between lidar and IMU calibrated by other algorithms,
-            #e.g. LI-Init (can be found in README).
-            # This param will take effect no matter what time_sync_en is. So if the time offset is not known exactly, please set as 0.0
+            # imu_topic:  "/imu/data"
+            odom_topic: "/livox/odometry" # 发布的里程计数据的topic，消息类型为nav_msgs::Odometry
+            odom_frame: "map" # 里程计坐标系
+            base_frame: "livox" # 机器人坐标系
+            con_frame: false # true: if you need to combine several LiDAR frames into one # 是否需要将多帧点云数据合并成一帧
+            con_frame_num: 1 # the number of frames combined # 合并的帧数
+            cut_frame: false # true: if you need to cut one LiDAR frame into several subframes # 是否需要将一帧点云数据分割成多帧
+            cut_frame_time_interval: 0.1 # should be integral fraction of 1 / LiDAR frequency # 分割的时间间隔，应该是1/LiDAR频率的整数倍
+            time_diff_lidar_to_imu: 0.0 # Time offset between LiDAR and IMU calibrated by other algorithms, e.g., LI-Init (find in Readme)
+              # LiDAR和IMU之间的时间偏移，由其他算法校准，例如LI-Init（在Readme中查找）TODO需要调整
+              # the timesample of IMU is transferred from the current timeline to LiDAR's timeline by subtracting this value
+            # IMU的时间样本通过减去该值从当前时间线转换到LiDAR的时间线
 
         preprocess:
-            lidar_type: 1             # 1 for Livox serials LiDAR
-            scan_line:  4             # Livox MID360的扫描线数
-            blind: 0.5                # LiDAR的盲区，单位为米
-            timestamp_unit: 3         # PointCloud2 rostopic中时间戳字段的单位：0-秒，1-毫秒，2-微秒，3-纳秒。
-                                      # 只对非Livox LiDAR起作用，Livox LiDAR采用了CustomMsg消息类型，这个设置不起作用
-            scan_rate: 10
+            lidar_type: 1 # 1表示Livox Avia LiDAR
+            scan_line: 4 # Livox MID360的扫描线数
+            timestamp_unit: 3 # the unit of time/t field in the PointCloud2 rostopic: 0-second, 1-milisecond, 2-microsecond, 3-nanosecond.
+              # PointCloud2 rostopic中时间戳字段的单位：0-秒，1-毫秒，2-微秒，3-纳秒。
+            # 只对非Livox LiDAR起作用，Livox LiDAR采用了CustomMsg消息类型，这个设置不起作用
+            blind: 0.5 # LiDAR的盲区，单位为米
 
         mapping:
-            acc_cov: 0.1                 # IMU的加速度输入噪声协方差
-            gyr_cov: 0.1                 # IMU的角速度输入噪声协方差
-            b_acc_cov: 0.0001            # IMU的加速度偏置噪声协方差
-            b_gyr_cov: 0.0001            # IMU的角速度偏置噪声协方差
-            fov_degree:    360.0
-            det_range:     100.0
-            extrinsic_est_en:  true      # true: enable the online estimation of IMU-LiDAR extrinsic
-                                         # 对于激进运动，将此变量设置为false
-            extrinsic_T: [ -0.011, -0.02329, 0.04412 ]
-            extrinsic_R: [ 1., 0., 0.,
-                           0., 1., 0.,
-                           0., 0., 1.]
+            imu_en: true
+            extrinsic_est_en: true # for aggressive motion, set this variable false
+            # 对于激进运动，将此变量设置为false
+            imu_time_inte: 0.005 # = 1 / frequency of IMU
+            # IMU的周期
+            lidar_time_inte: 0.1 # LiDAR的周期
+            satu_acc: 4.0 # the saturation value of IMU's acceleration. not related to the units
+            # IMU的加速度饱和值。与单位无关。TODO需要调整
+            satu_gyro: 35.0 # the saturation value of IMU's angular velocity. not related to the units
+            # IMU的角速度饱和值。与单位无关。TODO需要调整
+            acc_norm: 1.0 # 1.0 for g as unit, 9.81 for m/s^2 as unit of the IMU's acceleration
+            # IMU的加速度单位，1.0表示g，9.81表示m/s^2
+            lidar_meas_cov: 0.01 # 0.001; 0.01
+            # LiDAR测量噪声协方差 TODO需要调整
+            acc_cov_output: 500.0 # IMU的加速度输出噪声协方差 TODO需要调整
+            gyr_cov_output: 1000.00 # IMU的角速度输出噪声协方差 TODO需要调整
+            b_acc_cov: 0.0001 # IMU的加速度偏置噪声协方差 TODO需要调整
+            b_gyr_cov: 0.0001 # IMU的角速度偏置噪声协方差 TODO需要调整
+            imu_meas_acc_cov: 0.1 #0.1 # 0.1 #
+            # IMU的加速度测量噪声协方差 TODO需要调整
+            imu_meas_omg_cov: 0.1 #0.01 # 0.1
+            # IMU的角速度测量噪声协方差 TODO需要调整
+            gyr_cov_input: 0.01 # for IMU as input model
+            # IMU的角速度输入噪声协方差 TODO需要调整
+            acc_cov_input: 0.1 # for IMU as input model
+            # IMU的加速度输入噪声协方差 TODO需要调整
+            plane_thr: 0.1 # 0.05, the threshold for plane criteria, the smaller, the flatter a plane
+            # 平面判据的阈值，越小越平坦 TODO需要调整
+            match_s: 81.0 # 匹配窗口的大小 TODO不清楚作用
+            ivox_grid_resolution: 0.5 # 体素网格的分辨率
+            gravity: [0.0, 0.0, -9.810] # [0.0, 9.810, 0.0] # gravity to be aligned
+            # 要对齐的重力
+            gravity_init: [0.0, 0.0, -9.810] # [0.0, 9.810, 0.0] # # preknown gravity in the first IMU body frame, use when imu_en is false or start from a non-stationary state
+            # 第一个IMU坐标系中的预先知道的重力，当imu_en为false或从非静止状态开始时使用
+            # extrinsic_T: [ -0.011, -0.02339, 0.04412 ] # 点云坐标系在IMU坐标系下的位置 标准位置
+            extrinsic_T: [ -0.011, -0.02339, -0.04412 ] # 点云坐标系在IMU坐标系下的位置 倒装位置
+            extrinsic_R: [ 1.0, 0.0, 0.0,
+                           0.0, 1.0, 0.0,
+                           0.0, 0.0, 1.0 ] # 点云坐标系在IMU坐标系下的旋转矩阵
+
+        odometry:
+            publish_odometry_without_downsample: false
 
         publish:
-            path_en: false          # true: publish Path
-            effect_map_en: false         # true: publish Effects
-            map_en: true                 # true: publish Map cloud
-            scan_publish_en:  true       # false: close all the point cloud output
-            dense_publish_en: false      # false: low down the points number in a global-frame point clouds scan.
+            path_en: false # false: close the path output
+            # false：关闭路径输出
+            scan_publish_en: true # false: close all the point cloud output
+            # false：关闭所有点云输出
             scan_bodyframe_pub_en: false  # true: output the point cloud scans in IMU-body-frame
+            # true：输出IMU坐标系下的点云
 
         pcd_save:
-            pcd_save_en: true
-            interval: 1800                 # how many LiDAR frames saved in each pcd file;
-            # -1 : all frames will be saved in ONE pcd file, may lead to memory crash when having too much frames.
+            pcd_save_en: false
+            interval: -1 # how many LiDAR frames saved in each pcd file;
+              # 每个pcd文件中保存多少帧LiDAR数据
+              # -1 : all frames will be saved in ONE pcd file, may lead to memory crash when having too much frames.
+              # -1：所有帧都将保存在一个pcd文件中，当有太多帧时可能会导致内存崩溃。
+            #测试
+            #lmy
+            use_pcd_map_: true
+            prior_PCD_map_path: "/home/sentry111/licang_ws/src/licang/point_lio_ros2/point_lio/PCD/2024_10_08_07_37_59_1.pcd"
+        init_pos:
+            init_x: 0.0
+            init_y: 0.0
+            init_z: 0.0
+            initial_rot: [0.0, 0.0, 0.0, 1.0]
+        gcl:
+            task: "B"
+        #lmy
 
 bt_navigator:
     ros__parameters:
@@ -111,8 +181,8 @@ robot_bt_decision_maker_node:
         loop_duration_in_millisec: 100
         server_timeout_in_millisec: 1000
         transform_tolerance: 0.15
-        bt_xml_filename: "/behavior_trees/licang_test.xml"
-        tree_name: ["/behavior_trees/licang_test.xml"]
+        bt_xml_filename: "/behavior_trees/test.xml"
+        tree_name: ["/behavior_trees/test.xml"]
         plugin_lib_names:
             - nav2_keep_away_from_obstacles_action_bt_node
             - nav2_navigate_to_pose_action_bt_node
@@ -123,6 +193,13 @@ robot_bt_decision_maker_node:
             - nav2_user_force_failure_decorator_bt_node
             - nav2_update_goal_action_bt_node
             - nav2_send_decision_action_bt_node
+            - nav2_robot_status_action_bt_node
+            - nav2_send_qrcode_action_bt_node
+            - nav2_if_adjust_condition_bt_node
+            - nav2_if_finish_condition_bt_node
+            - nav2_if_catch_ball_condition_bt_node
+            - nav2_is_goal_reached_condition_bt_node
+            - nav2_is_goal_update_condition_bt_node
 robot_bt_decision_maker_node_rclcpp_node:
     ros__parameters:
         goal_reached_tol: 0.3 # 允许到目标位置的最终x和y的偏差（以米为单位），不考虑角度差
@@ -377,7 +454,7 @@ behavior_server:
         robot_radius: 0.3
         keep_away_from_obstacles:
             plugin: "nav2_behaviors/KeepAwayFromObstacles"
-        global_frame: odom
+        global_frame: map
         robot_base_frame: livox
         transform_tolerance: 0.1
 

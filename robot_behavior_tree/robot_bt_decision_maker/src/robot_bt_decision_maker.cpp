@@ -33,6 +33,16 @@ public:
         this->declare_parameter("tree_name", std::vector<std::string>());
         this->get_parameter("tree_name", tree_name);
         waitNav2();
+        pose.header.stamp = now();
+        pose.header.frame_id = "map";
+        pose.pose.position.x = 0.0;
+        pose.pose.position.y = 0.0;
+        pose.pose.position.z = 0.0;
+        pose.pose.orientation.x = 0.0;
+        pose.pose.orientation.y = 0.0;
+        pose.pose.orientation.z = -1.0;
+        pose.pose.orientation.w = 0.0;
+        auto duration1 = std::chrono::milliseconds(50); // 50毫秒
         client_node_name_ = this->get_name();
         auto options = rclcpp::NodeOptions().arguments(
             {"--ros-args",
@@ -61,6 +71,8 @@ public:
         blackboard_->set<float>("pose_y",0.0);
         blackboard_->set<bool>("is_adjust",false);
         blackboard_->set<bool>("is_finished",false);
+        blackboard_->set<geometry_msgs::msg::PoseStamped>("goal",pose);
+        blackboard_->set<bool>("is_goal_reached",false);
         if(is_we_are_blue_)
         {
             blackboard_->set<float>("exchange_x",-4.11);
@@ -88,7 +100,7 @@ public:
         };
         auto on_loop = [this]() -> void
         {
-            // RCLCPP_INFO(this->get_logger(), "行为树正在运行...");
+            //RCLCPP_INFO(this->get_logger(), "行为树正在运行...");
             rclcpp::spin_some(this->get_node_base_interface());
         };
         // Run the Behavior Tree
@@ -105,7 +117,7 @@ public:
         std::string state = "unknown";
         while (state != "active")
         {
-            RCLCPP_INFO(this->get_logger(), "等待重定位启动");
+            RCLCPP_INFO(this->get_logger(), "等待机器人启动");
             auto future = client->async_send_request(request);
             rclcpp::spin_until_future_complete(this->get_node_base_interface(), future ,std::chrono::seconds(2));
             auto result = future.get(); // 获取结果并存储在变量中
@@ -171,6 +183,8 @@ private:
                 blackboard->set<float>("pose_y",0.0);
                 blackboard->set<bool>("is_adjust",false);
                 blackboard->set<bool>("is_finished",false);
+                blackboard->set<geometry_msgs::msg::PoseStamped>("goal",pose);
+                blackboard->set<bool>("is_goal_reached",false);
                 if(is_we_are_blue_)
                 {
                     blackboard->set<float>("exchange_x",-4.11);
