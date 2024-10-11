@@ -32,7 +32,7 @@ private:
         };
         SOF++;
         warehouseSerial.write(0x0501, SOF,velocity);
-        RCLCPP_INFO(this->get_logger(),"%f %f %f",msg->linear.x,msg->linear.y,msg->angular.z);
+        //RCLCPP_INFO(this->get_logger(),"%f %f %f",msg->linear.x,msg->linear.y,msg->angular.z);
     }
     void decisionCallback(const robot_serial::msg::Decision::SharedPtr msg){
         static uint8_t SOF = 0x00;

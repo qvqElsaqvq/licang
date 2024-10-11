@@ -44,18 +44,22 @@ namespace nav2_behavior_tree
         if(msg->is_adjust == 0x00){
             is_adjust = false;
             config().blackboard->set<bool>("is_adjust", is_adjust);
+            std::cout << "is_adjust" << is_adjust << std::endl;
         }
         else if(msg->is_adjust == 0x01){
             is_adjust = true;
             config().blackboard->set<bool>("is_adjust", is_adjust);
+            std::cout << "is_adjust" << is_adjust << std::endl;
         }
         if(msg->is_finished == 0x00){
             is_finished = false;
             config().blackboard->set<bool>("is_finished", is_finished);
+            std::cout << "is_finished" << is_finished << std::endl;
         }
         else if(msg->is_finished == 0x01){
             is_finished = true;
             config().blackboard->set<bool>("is_finished", is_finished);
+            std::cout << "is_finished" << is_finished << std::endl;
         }
     }
 
