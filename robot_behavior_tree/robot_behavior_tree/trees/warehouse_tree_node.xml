@@ -32,17 +32,31 @@
         <Action ID="Printf">
             <input_port name="txt"/>
         </Action>
+        <Action ID="ReceiveInitError">
+            <input_port name="position_x1"/>
+            <input_port name="position_x2"/>
+            <input_port name="position_x3"/>
+            <input_port name="position_x4"/>
+            <input_port name="position_x5"/>
+            <input_port name="position_y1"/>
+            <input_port name="position_y2"/>
+            <input_port name="position_y3"/>
+            <input_port name="position_y4"/>
+            <input_port name="position_y5"/>
+        </Action>
         <Action ID="RobotStatus"/>
         <Action ID="SendDecision">
             <input_port name="catch_decision"/>
             <input_port name="if_navigation"/>
             <input_port name="qrcode_number"/>
         </Action>
+        <Action ID="SendPositionError">
+            <input_port name="goal"/>
+            <input_port name="target_angle"/>
+        </Action>
         <Action ID="SendQrcode"/>
         <Action ID="UpdateGoal">
             <output_port name="goal" default="{goal}"/>
-            <input_port name="position_x"/>
-            <input_port name="position_y"/>
         </Action>
         <Decorator ID="UserForceFailure"/>
         <Decorator ID="UserForceSuccess"/>

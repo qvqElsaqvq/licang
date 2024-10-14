@@ -14,6 +14,7 @@ find_package(tf2_eigen REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(tf2_sensor_msgs REQUIRED)
 find_package(tf2_geometry_msgs REQUIRED)
+find_package(std_msgs REQUIRED)
 
 include_directories(
         include
@@ -28,6 +29,7 @@ ament_target_dependencies(map_odom_pub_node
         std_msgs
         tf2_sensor_msgs
         tf2_geometry_msgs
+        std_msgs
 )
 
 install(TARGETS map_odom_pub_node

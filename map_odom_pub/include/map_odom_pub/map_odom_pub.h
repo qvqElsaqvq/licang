@@ -7,8 +7,11 @@
 
 #include "rclcpp/rclcpp.hpp"
 #include <geometry_msgs/msg/transform_stamped.hpp>
+#include "geometry_msgs/msg/pose_stamped.hpp"
+#include <std_msgs/msg/float32.hpp>
 #include <tf2_ros/transform_broadcaster.h>
 #include <tf2_ros/buffer.h>
+#include "tf2_ros/transform_listener.h"
 
 class MapOdomPublishNode : public rclcpp::Node
 {
@@ -16,14 +19,12 @@ public:
     explicit MapOdomPublishNode();
 
 private:
-    std::string global_frame_id_;
-    std::string odom_frame_id_;
-    std::vector<double> initial_trans_;
-    std::vector<double> initial_rot_;
+    bool flag;
 
     geometry_msgs::msg::TransformStamped init_transform_;
-    std::mutex init_transform_mtx_;
-    tf2_ros::TransformBroadcaster broadcaster_;
+    std::shared_ptr<tf2_ros::TransformListener> tf_listener_{nullptr};
+    std::unique_ptr<tf2_ros::Buffer> tf_buffer_;
+    rclcpp::Publisher<geometry_msgs::msg::PoseStamped>::SharedPtr init_transform_pub_;
 
     rclcpp::TimerBase::SharedPtr timer_;
 

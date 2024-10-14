@@ -6,42 +6,55 @@
 using namespace std::chrono_literals;
 
 MapOdomPublishNode::MapOdomPublishNode()
-    : Node("map_odom_pub_node"),
-      broadcaster_(this)
+    : Node("map_odom_pub_node")
 {
-    RCLCPP_INFO(get_logger(), "node is created.");
-    // 声明参数
-    declare_parameter("global_frame_id", "map");
-    declare_parameter("odom_frame_id", "odom");
-    declare_parameter("initial_trans", std::vector<double>{0.0, 0.0, 0.0});
-    declare_parameter("initial_rot", std::vector<double>{0.0, 0.0, 0.0, 1.0});
+    RCLCPP_INFO(get_logger(), "map_odom_pub node is created.");
+    flag = true;
 
-    get_parameter("global_frame_id", global_frame_id_);
-    get_parameter("odom_frame_id", odom_frame_id_);
-    get_parameter("initial_trans", initial_trans_);
-    get_parameter("initial_rot", initial_rot_);
-
-    // 初始化订阅者、发布者、服务端、客户端
-    timer_ = this->create_wall_timer( 0.05s, std::bind(&MapOdomPublishNode::timer_callback, this));
-    RCLCPP_INFO(get_logger(), "初始位姿初始化完成");
+    init_transform_pub_ = create_publisher<geometry_msgs::msg::PoseStamped>("/robot/init_transform", 1);
+    tf_buffer_ = std::make_unique<tf2_ros::Buffer>(this->get_clock());
+    tf_listener_ = std::make_shared<tf2_ros::TransformListener>(*tf_buffer_);
+    timer_ = this->create_wall_timer( 30s, std::bind(&MapOdomPublishNode::timer_callback, this));
+    RCLCPP_INFO(get_logger(), "map_odom_pub 初始化完成");
 }
 
 void MapOdomPublishNode::timer_callback()
 {
-    // 发布变换
-    init_transform_mtx_.lock();
-    init_transform_.header.stamp = now();
-    init_transform_.header.frame_id = global_frame_id_;
-    init_transform_.child_frame_id = odom_frame_id_;
-    init_transform_.transform.translation.x = initial_trans_[0];
-    init_transform_.transform.translation.y = initial_trans_[1];
-    init_transform_.transform.translation.z = initial_trans_[2];
-    init_transform_.transform.rotation.x = initial_rot_[0];
-    init_transform_.transform.rotation.y = initial_rot_[1];
-    init_transform_.transform.rotation.z = initial_rot_[2];
-    init_transform_.transform.rotation.w = initial_rot_[3];
-    broadcaster_.sendTransform(init_transform_);
-    //RCLCPP_INFO(get_logger(), "translation: [ %f, %f, %f], rotation: [ %f, %f, %f, %f]", initial_trans_[0], initial_trans_[1],
-    //    initial_trans_[2], initial_rot_[0], initial_rot_[1], initial_rot_[2], initial_rot_[3]);
-    init_transform_mtx_.unlock();
+    if(flag)
+    {
+        double roll, pitch, yaw;
+        try
+        {
+            init_transform_ = tf_buffer_->lookupTransform("map", "livox", tf2::TimePointZero);
+            tf2::Quaternion quaternion(init_transform_.transform.translation.x,
+                init_transform_.transform.translation.y,
+                init_transform_.transform.translation.z,
+                init_transform_.transform.rotation.w);
+            tf2::Matrix3x3 euler(quaternion);
+            euler.getRPY(roll, pitch, yaw);
+            std::cout << "----------------------------------------------------" << std::endl;
+            std::cout << "----------------------------------------------------" << std::endl;
+            std::cout << "----------------------------------------------------" << std::endl;
+            std::cout << "----------------------------------------------------" << std::endl;
+            std::cout << "----------------------------------------------------" << std::endl;
+            std::cout << "init_transform: x: " << init_transform_.transform.translation.x
+            << " y: " << init_transform_.transform.translation.y << " yaw:" << yaw << std::endl;
+
+            geometry_msgs::msg::PoseStamped robot_transform;
+            robot_transform.header.stamp = init_transform_.header.stamp;
+            robot_transform.header.frame_id = init_transform_.header.frame_id;
+            robot_transform.pose.position.x = init_transform_.transform.translation.x;
+            robot_transform.pose.position.y = init_transform_.transform.translation.y;
+            robot_transform.pose.position.z = init_transform_.transform.translation.z;
+            robot_transform.pose.orientation = init_transform_.transform.rotation;
+            init_transform_pub_->publish(robot_transform);
+
+            flag = false;
+        }
+        catch (tf2::TransformException &ex)
+        {
+            RCLCPP_ERROR(get_logger(), "%s", ex.what());
+            return;
+        }
+    }
 }

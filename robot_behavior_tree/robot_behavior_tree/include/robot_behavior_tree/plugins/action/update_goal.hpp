@@ -47,10 +47,8 @@ namespace nav2_behavior_tree
         static BT::PortsList providedPorts()
         {
             return {
-                    BT::InputPort<double>("position_x", "position_x to plan to"),
-                    BT::InputPort<double>("position_y", "position_y to plan to"),
-                    BT::OutputPort<geometry_msgs::msg::PoseStamped>("goal", "Destination to plan to"),
-                };
+                BT::OutputPort<geometry_msgs::msg::PoseStamped>("goal", "Destination to plan to"),
+            };
         }
 
     private:
@@ -63,6 +61,8 @@ namespace nav2_behavior_tree
         double position_y;
         geometry_msgs::msg::PoseStamped pose;
         rclcpp::Publisher<geometry_msgs::msg::PoseStamped>::SharedPtr goal_pub_;
+        std::string cmd_status;  //0-avoid,1-rotating,2-platform,3-column,4-
+        bool is_match_finish;
     };
 
 } // namespace nav2_behavior_tree

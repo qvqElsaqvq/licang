@@ -9,6 +9,7 @@
 
 #include <rclcpp/rclcpp.hpp>
 #include <geometry_msgs/msg/twist.hpp>
+#include "geometry_msgs/msg/pose_stamped.hpp"
 #include "sentry_msg.h"
 #include "robot_message.h"
 #include "robot_referee.h"
@@ -21,6 +22,7 @@ private:
 
     rclcpp::Subscription<geometry_msgs::msg::Twist>::SharedPtr VelocitySubscription;
     rclcpp::Subscription<robot_serial::msg::Decision>::SharedPtr DecisionSubscription;
+    rclcpp::Subscription<robot_serial::msg::Location>::SharedPtr LocationErrorSubscription;
     rclcpp::Publisher<robot_serial::msg::Robotstatus>::SharedPtr RobotStatusPublisher;
     
     void velocityCallback(const geometry_msgs::msg::Twist::SharedPtr msg){
@@ -44,6 +46,17 @@ private:
         SOF++;
         warehouseSerial.write(0x0502, SOF, decision);
         //RCLCPP_INFO(this->get_logger());
+    }
+    void locationerrorCallback(const robot_serial::msg::Location::SharedPtr msg)
+    {
+        static uint8_t SOF = 0x00;
+        robot_position_t location_error{
+            msg->x_err,
+            msg->y_err,
+            msg->angle_err,
+        };
+        SOF++;
+        warehouseSerial.write(0x0503, SOF, location_error);
     }
 
 public:
@@ -96,6 +109,8 @@ public:
                         std::bind(&RobotSerial::velocityCallback, this, std::placeholders::_1));
         DecisionSubscription = create_subscription<robot_serial::msg::Decision>("/robot/decision", 1,
                         std::bind(&RobotSerial::decisionCallback, this, std::placeholders::_1));
+        LocationErrorSubscription = create_subscription<robot_serial::msg::Location>("/robot/location_error",
+                        1, std::bind(&RobotSerial::locationerrorCallback, this, std::placeholders::_1));
         RobotStatusPublisher = create_publisher<robot_serial::msg::Robotstatus>("/robot/robotstatus", 1);
 
         warehouseSerial.spin(true);

@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<robot name="robot">
+    
+  <!-- base link -->
+  <link name="base_link">
+      <visual>
+      <origin xyz="0 0 0.0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.4 0.4 0.15"/>
+      </geometry>
+    </visual>
+  </link>
+    
+  <!-- laser link -->
+  <link name="livox">
+      <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <cylinder length="0.02" radius="0.02"/>
+      </geometry>
+      <material name="black">
+          <color rgba="0.0 0.0 0.0 0.8" /> 
+      </material>
+    </visual>
+  </link>
+    
+  <!-- laser joint -->
+    <joint name="laser_joint" type="fixed">
+        <parent link="livox" />
+        <child link="base_link" />
+        <origin xyz="-0.132 -0.136 -0.1" />
+    </joint>
+
+</robot>
+

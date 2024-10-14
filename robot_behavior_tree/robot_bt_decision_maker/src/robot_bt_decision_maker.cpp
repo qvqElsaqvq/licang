@@ -79,6 +79,18 @@ public:
         blackboard_->set<std::string>("cmd_status", "avoid");
         blackboard_->set<int>("if_navigation",1);
         blackboard_->set<bool>("is_match_finish", false);
+        blackboard_->set<double>("target_x1", 0.0);
+        blackboard_->set<double>("target_y1", 0.0);
+        blackboard_->set<double>("target_x2", 0.0);
+        blackboard_->set<double>("target_y2", 0.0);
+        blackboard_->set<double>("target_x3", 0.0);
+        blackboard_->set<double>("target_y3", 0.0);
+        blackboard_->set<double>("target_x4", 0.0);
+        blackboard_->set<double>("target_y4", 0.0);
+        blackboard_->set<double>("target_x5", 0.0);
+        blackboard_->set<double>("target_y5", 0.0);
+        blackboard_->set<double>("init_x", 0.0);
+        blackboard_->set<double>("init_y", 0.0);
         if(is_we_are_blue_)
         {
             blackboard_->set<float>("exchange_x",-4.11);
@@ -197,6 +209,18 @@ private:
                 blackboard->set<std::string>("cmd_status", "avoid");
                 blackboard->set<int>("if_navigation",1);
                 blackboard->set<bool>("is_match_finish", false);
+                blackboard->set<double>("target_x1", 0.0);
+        		blackboard->set<double>("target_y1", 0.0);
+        		blackboard->set<double>("target_x2", 0.0);
+        		blackboard->set<double>("target_y2", 0.0);
+        		blackboard->set<double>("target_x3", 0.0);
+        		blackboard->set<double>("target_y3", 0.0);
+        		blackboard->set<double>("target_x4", 0.0);
+        		blackboard->set<double>("target_y4", 0.0);
+        		blackboard->set<double>("target_x5", 0.0);
+        		blackboard->set<double>("target_y5", 0.0);
+                blackboard->set<double>("init_x", 0.0);
+        		blackboard->set<double>("init_y", 0.0);
                 if(is_we_are_blue_)
                 {
                     blackboard->set<float>("exchange_x",-4.11);

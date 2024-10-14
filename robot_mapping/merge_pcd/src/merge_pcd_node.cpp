@@ -36,7 +36,8 @@ int main(int argc, char **argv)
     time_t now = time(0);
     tm *ltm = localtime(&now);
     char merge_file_name[200];
-    sprintf(merge_file_name, "/%d_%02d_%02d_%02d_%02d_%02d_merged.pcd", 1900 + ltm->tm_year, 1 + ltm->tm_mon, ltm->tm_mday, ltm->tm_hour, ltm->tm_min, ltm->tm_sec);
+    //sprintf(merge_file_name, "/%d_%02d_%02d_%02d_%02d_%02d_merged.pcd", 1900 + ltm->tm_year, 1 + ltm->tm_mon, ltm->tm_mday, ltm->tm_hour, ltm->tm_min, ltm->tm_sec);
+    sprintf(merge_file_name, "/warehouse.pcd");
     std::string merge_file_name_string(merge_file_name);
     pcl::io::savePCDFileASCII(pcd_folder_ + merge_file_name_string, *cloud);
     RCLCPP_INFO(node->get_logger(), "Saved %s", (pcd_folder_ + merge_file_name_string).c_str());

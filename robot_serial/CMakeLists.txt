@@ -28,6 +28,7 @@ find_package(rosidl_default_generators REQUIRED)
 rosidl_generate_interfaces(${PROJECT_NAME}
         "msg/Transmit/Velocity.msg"
         "msg/Transmit/Decision.msg"
+        "msg/Transmit/Location.msg"
         "msg/Receive/Imagelocation.msg"
         "msg/Receive/Qrcodeinfo.msg"
         "msg/Receive/Robotstatus.msg"

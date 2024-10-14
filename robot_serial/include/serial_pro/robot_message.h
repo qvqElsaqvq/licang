@@ -26,5 +26,10 @@ message_data robot_status_t{
     uint8_t is_adjust;
     uint8_t is_finished;
 };
+message_data robot_position_t{
+    float x_err;
+    float y_err;
+    float angle_err;
+};
 
 #endif //ROBOT_SERIAL_ROBOT_MESSAGE_H
