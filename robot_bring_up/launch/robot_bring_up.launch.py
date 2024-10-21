@@ -18,7 +18,7 @@ def generate_launch_description():
     if_sim = False
     if_map = False  # 只启动雷达驱动、point-lio
 
-    point_lio_launch = get_package_share_directory("point_lio")
+    point_lio_launch = get_package_share_directory("point_lio_cxr")
     robot_bring_up_path = get_package_share_directory("robot_bring_up")
     init_transform_path = get_package_share_directory("map_odom_pub")
     obstacle_segmentation_path = get_package_share_directory("obstacle_segmentation")
@@ -76,7 +76,7 @@ def generate_launch_description():
     )
     point_lio_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
-            [point_lio_launch, "/launch", "/mapping_autostart.launch.py"]
+            [point_lio_launch, "/launch", "/pointlio.launch.py"]
         ),
         launch_arguments={
             "params_file": param_yaml_path,
@@ -131,17 +131,17 @@ def generate_launch_description():
             robot_description_launch,
             rviz_node,
             TimerAction(
-                period=10.0,
+                period=15.0,
                 actions=[
                     point_lio_launch
                 ],
             ),
             TimerAction(
-                period=5.0,
+                period=10.0,
                 actions=[
                     navigation_launch,
-                    obstacle_segmentation_launch,
-                    init_transform_launch
+                    obstacle_segmentation_launch
+                    #init_transform_launch
                 ],
             )
             ]

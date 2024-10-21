@@ -62,6 +62,9 @@ list(APPEND plugin_libs nav2_send_position_error_action_bt_node)
 add_library(nav2_receive_init_error_action_bt_node SHARED plugins/action/receive_init_error.cpp)
 list(APPEND plugin_libs nav2_receive_init_error_action_bt_node)
 
+add_library(nav2_set_goal_action_bt_node SHARED plugins/action/set_goal.cpp)
+list(APPEND plugin_libs nav2_set_goal_action_bt_node)
+
 add_library(nav2_if_adjust_condition_bt_node SHARED plugins/condition/if_adjust.cpp)
 list(APPEND plugin_libs nav2_if_adjust_condition_bt_node)
 

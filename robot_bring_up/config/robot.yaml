@@ -32,7 +32,7 @@ obstacle_segmentation_node:
 ## PCD转二维栅格地图
 pcd2pgm_node:
     ros__parameters:
-        pcd_path: "/home/sentry111/licang_ws/src/licang/point_lio_ros2/point_lio/PCD" # 点云路径
+        pcd_path: "/home/sentry111/licang_ws/src/licang/Point-LIO_cxr/PCD" # 点云路径
         pcd_name: "warehouse.pcd"
         map_path: "/home/sentry111/licang_ws/src/licang/robot_bring_up/maps"
         map_name: "test1.png"
@@ -135,14 +135,14 @@ laserMapping:
             # true：输出IMU坐标系下的点云
 
         pcd_save:
-            pcd_save_en: false
+            pcd_save_en: true
             interval: 1800 # how many LiDAR frames saved in each pcd file;
               # 每个pcd文件中保存多少帧LiDAR数据
               # -1 : all frames will be saved in ONE pcd file, may lead to memory crash when having too much frames.
               # -1：所有帧都将保存在一个pcd文件中，当有太多帧时可能会导致内存崩溃。
             #测试
             #lmy
-            use_pcd_map_: true
+            use_pcd_map_: false
             prior_PCD_map_path: "/home/sentry111/licang_ws/src/licang/point_lio_ros2/point_lio/PCD/warehouse.pcd"
         init_pos:
             init_x: 0.0
@@ -184,8 +184,8 @@ robot_bt_decision_maker_node:
         loop_duration_in_millisec: 100
         server_timeout_in_millisec: 1000
         transform_tolerance: 0.15
-        bt_xml_filename: "/behavior_trees/warehouse_test.xml"
-        tree_name: ["/behavior_trees/warehouse_test.xml"]
+        bt_xml_filename: "/behavior_trees/paotu_test.xml"
+        tree_name: ["/behavior_trees/paotu_test.xml"]
         plugin_lib_names:
             - nav2_keep_away_from_obstacles_action_bt_node
             - nav2_navigate_to_pose_action_bt_node
@@ -210,6 +210,7 @@ robot_bt_decision_maker_node:
             - nav2_if_match_finish_condition_bt_node
             - nav2_send_position_error_action_bt_node
             - nav2_receive_init_error_action_bt_node
+            - nav2_set_goal_action_bt_node
 robot_bt_decision_maker_node_rclcpp_node:
     ros__parameters:
         goal_reached_tol: 0.15 # 允许到目标位置的最终x和y的偏差（以米为单位），不考虑角度差
@@ -225,7 +226,7 @@ controller_server:
         general_goal_checker:
             stateful: True
             plugin: "nav2_controller::SimpleGoalChecker"
-            xy_goal_tolerance: 0.15
+            xy_goal_tolerance: 0.08
             yaw_goal_tolerance: 6.28
         FollowPath:
             plugin: teb_local_planner::TebLocalPlannerROS
@@ -252,10 +253,10 @@ controller_server:
 
             # Robot
 
-            max_vel_x: 0.5 # 机器人最大x轴速度m/s
-            max_vel_y: 0.5 # 机器人最大y轴速度m/s
+            max_vel_x: 0.6 # 机器人最大x轴速度m/s
+            max_vel_y: 0.6 # 机器人最大y轴速度m/s
             max_vel_x_backwards: 1.0 # 机器人最大x轴后退速度m/s
-            max_vel_theta: 0.1 # 机器人最大角速度rad/s
+            max_vel_theta: 1.0 # 机器人最大角速度rad/s
             acc_lim_x: 1.0 # 机器人最大x轴平移加速度m/s^2
             acc_lim_y: 1.0 # 机器人最大y轴平移加速度m/s^2
             acc_lim_theta: 1.0 # 机器人最大角加速度rad/s^2
@@ -263,7 +264,7 @@ controller_server:
             is_footprint_dynamic: False
             footprint_model: # types: "point", "circular", "two_circles", "line", "polygon"
                 type: "circular"
-                radius: 0.22 # for type "circular"
+                radius: 0.2 # for type "circular"
 
             # GoalTolerance
 
@@ -271,8 +272,8 @@ controller_server:
 
             # Obstacles
 
-            min_obstacle_dist: 0.1 # 机器人与障碍物之间的最小距离（以米为单位）2.28
-            inflation_dist: 1.0 # 非零惩罚成本的障碍物周围的缓冲区（应大于min_obstacle_dist才能生效）。
+            min_obstacle_dist: 0.01 # 机器人与障碍物之间的最小距离（以米为单位）2.28
+            inflation_dist: 0.04 # 非零惩罚成本的障碍物周围的缓冲区（应大于min_obstacle_dist才能生效）。
             include_costmap_obstacles: True # 指定是否应考虑本地成本图的障碍。每个被标记为障碍物的单元格都被视为点障碍物。因此，不要选择非常小的代价图分辨率，因为它会增加计算时间。
             costmap_obstacles_behind_robot_dist: 4.0 # 限制机器人后面规划时考虑的占用的本地成本图障碍（指定距离以米为单位）。
             obstacle_poses_affected: 15 # 每个障碍物位置都附加到轨迹上最近的姿势以保持距离。还可以考虑其他邻居。
@@ -369,12 +370,12 @@ local_costmap:
             width: 8
             height: 8
             resolution: 0.05
-            robot_radius: 0.1
+            robot_radius: 0.05
             plugins: ["static_layer", "obstacle_layer", "inflation_layer"]
             inflation_layer:
                 plugin: "nav2_costmap_2d::InflationLayer"
                 cost_scaling_factor: 2.0
-                inflation_radius: 1.0
+                inflation_radius: 0.3
             obstacle_layer:
                 plugin: "nav2_costmap_2d::ObstacleLayer"
                 enabled: True
@@ -405,7 +406,7 @@ global_costmap:
             publish_frequency: 30.0
             global_frame: map
             robot_base_frame: base_link
-            robot_radius: 0.1
+            robot_radius: 0.05
             resolution: 0.05
             track_unknown_space: true
             plugins: ["static_layer", "obstacle_layer", "inflation_layer"]
@@ -433,7 +434,7 @@ global_costmap:
             inflation_layer:
                 plugin: "nav2_costmap_2d::InflationLayer"
                 cost_scaling_factor: 2.0
-                inflation_radius: 1.0
+                inflation_radius: 0.3
             always_send_full_costmap: True # 是否每次更新都发送完整的成本图，而不是更新。
 
 planner_server:
@@ -461,7 +462,7 @@ behavior_server:
         point_topic: /cloud_obstacle
         cycle_frequency: 50.0
         behavior_plugins: ["keep_away_from_obstacles"]
-        robot_radius: 0.3
+        robot_radius: 0.2
         keep_away_from_obstacles:
             plugin: "nav2_behaviors/KeepAwayFromObstacles"
         global_frame: map

@@ -1,0 +1,74 @@
+<?xml version="1.0"?>
+<root main_tree_to_execute="BehaviorTree">
+    <!-- ////////// -->
+    <BehaviorTree ID="BehaviorTree">
+        <ReactiveSequence>
+            <Action ID="SendDecision" catch_decision="0" if_navigation="0" qrcode_number="0"/>
+            <Condition ID="IfCatchBall" image_x_threshold_max="120" image_x_threshold_min="20" image_y_threshold_max="120" image_y_threshold_min="0"/>
+        </ReactiveSequence>
+    </BehaviorTree>
+    <!-- ////////// -->
+    <TreeNodesModel>
+        <Action ID="ChangeGoal">
+            <input_port name="current_decision"/>
+        </Action>
+        <Condition ID="GoalReached">
+            <input_port name="global_frame">Reference frame</input_port>
+            <input_port name="goal">Destination</input_port>
+            <input_port name="robot_base_frame">Robot base frame</input_port>
+        </Condition>
+        <Condition ID="GoalUpdated"/>
+        <Condition ID="IfAdjust"/>
+        <Condition ID="IfCatchBall">
+            <input_port name="image_x_threshold_max"/>
+            <input_port name="image_x_threshold_min"/>
+            <input_port name="image_y_threshold_max"/>
+            <input_port name="image_y_threshold_min"/>
+        </Condition>
+        <Condition ID="IfFinish"/>
+        <Condition ID="IfMatchFinish"/>
+        <Condition ID="IfNavigation"/>
+        <Condition ID="IsGoalReached">
+            <input_port name="goal"/>
+        </Condition>
+        <Condition ID="IsGoalUpdate">
+            <input_port default="{goal}" name="goal"/>
+        </Condition>
+        <Action ID="MatchStatus"/>
+        <Action ID="NavigateToPose">
+            <input_port default="{goal}" name="goal">Goal</input_port>
+        </Action>
+        <Action ID="Printf">
+            <input_port name="txt"/>
+        </Action>
+        <Action ID="ReceiveInitError">
+            <input_port name="position_x1"/>
+            <input_port name="position_x2"/>
+            <input_port name="position_x3"/>
+            <input_port name="position_x4"/>
+            <input_port name="position_x5"/>
+            <input_port name="position_y1"/>
+            <input_port name="position_y2"/>
+            <input_port name="position_y3"/>
+            <input_port name="position_y4"/>
+            <input_port name="position_y5"/>
+        </Action>
+        <Action ID="RobotStatus"/>
+        <Action ID="SendDecision">
+            <input_port name="catch_decision"/>
+            <input_port name="if_navigation"/>
+            <input_port name="qrcode_number"/>
+        </Action>
+        <Action ID="SendPositionError">
+            <input_port name="goal"/>
+            <input_port name="target_angle"/>
+        </Action>
+        <Action ID="SendQrcode"/>
+        <Action ID="UpdateGoal">
+            <output_port default="{goal}" name="goal"/>
+        </Action>
+        <Decorator ID="UserForceFailure"/>
+        <Decorator ID="UserForceSuccess"/>
+    </TreeNodesModel>
+    <!-- ////////// -->
+</root>

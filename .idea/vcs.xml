@@ -4,7 +4,6 @@
     <mapping directory="" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/costmap_converter" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/obstacle_segmentation_tc" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/point_lio_ros2" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/teb_local_planner" vcs="Git" />
   </component>
 </project>

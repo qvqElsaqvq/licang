@@ -13,7 +13,7 @@ int main(int argc, char **argv)
     RCLCPP_INFO(node->get_logger(), "merge_pcd_node start");
 
     std::string pcd_folder_;
-    node->declare_parameter("pcd_folder", "/home/sentry111/licang_ws/src/licang/point_lio_ros2/point_lio/PCD");
+    node->declare_parameter("pcd_folder", "/home/sentry111/licang_ws/src/licang/Point-LIO_cxr/PCD");
     node->get_parameter("pcd_folder", pcd_folder_);
 
     // 获取该路径下的所有文件

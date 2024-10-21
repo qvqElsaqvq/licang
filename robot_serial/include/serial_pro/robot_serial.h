@@ -34,7 +34,7 @@ private:
         };
         SOF++;
         warehouseSerial.write(0x0501, SOF,velocity);
-        //RCLCPP_INFO(this->get_logger(),"%f %f %f",msg->linear.x,msg->linear.y,msg->angular.z);
+        RCLCPP_INFO(this->get_logger(),"%f %f %f",msg->linear.x,msg->linear.y);
     }
     void decisionCallback(const robot_serial::msg::Decision::SharedPtr msg){
         static uint8_t SOF = 0x00;
@@ -101,7 +101,7 @@ public:
             robot_serial::msg::Robotstatus _Robotstatus;
             _Robotstatus.is_adjust = msg.is_adjust;
             _Robotstatus.is_finished = msg.is_finished;
-            RCLCPP_INFO(get_logger(), "is_adjust: %d is_finished: %d", msg.is_adjust, msg.is_finished);
+            //RCLCPP_INFO(get_logger(), "is_adjust: %d is_finished: %d", msg.is_adjust, msg.is_finished);
             RobotStatusPublisher->publish(_Robotstatus);
         });
 

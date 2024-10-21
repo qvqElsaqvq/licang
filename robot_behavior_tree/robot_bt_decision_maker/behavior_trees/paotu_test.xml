@@ -3,7 +3,7 @@
     <!-- ////////// -->
     <BehaviorTree ID="BehaviorTree">
         <ReactiveSequence>
-            <Action ID="SetGoal" position_x1="3.93" position_x2="3.82" position_x3="2.38" position_x4="1.63" position_x5="2.32" position_y1="0.62" position_y2="-0.91" position_y3="0.70" position_y4="-0.19" position_y5="-0.92"/>
+            <Action ID="SetGoal" position_x1="3.34" position_x2="3.93" position_x3="2.41" position_x4="1.64" position_x5="2.37" position_y1="0.24" position_y2="-0.91" position_y3="0.64" position_y4="-0.23" position_y5="-0.92"/>
             <Decorator ID="UserForceSuccess">
                 <ReactiveFallback>
                     <Condition ID="IsGoalUpdate" goal="{goal}"/>
@@ -25,7 +25,9 @@
                         <Action ID="SendPositionError" goal="{goal}" target_angle="90"/>
                         <Action ID="RobotStatus"/>
                         <Condition ID="IfAdjust"/>
-                        <Condition ID="IfCatchBall" image_x_threshold_max="100" image_x_threshold_min="0" image_y_threshold_max="100" image_y_threshold_min="0"/>
+                        <Repeat num_cycles="20">
+                            <Action ID="Printf" txt="到达圆盘机"/>
+                        </Repeat>
                         <Action ID="RobotStatus"/>
                         <Condition ID="IfFinish"/>
                         <Action ID="SendDecision" catch_decision="0" if_navigation="1" qrcode_number="0"/>
@@ -36,18 +38,21 @@
                         <Action ID="SendPositionError" goal="{goal}" target_angle="270"/>
                         <Action ID="RobotStatus"/>
                         <Condition ID="IfAdjust"/>
-                        <Condition ID="IfCatchBall" image_x_threshold_max="100" image_x_threshold_min="0" image_y_threshold_max="100" image_y_threshold_min="0"/>
+                        <Repeat num_cycles="20">
+                            <Action ID="Printf" txt="到达阶梯平台"/>
+                        </Repeat>
                         <Action ID="RobotStatus"/>
                         <Condition ID="IfFinish"/>
-                        <Action ID="SendDecision" catch_decision="0" if_navigation="1" qrcode_number="0"/>
+                        <Action ID="SendDecision" catch_decision="0" if_navigation="0" qrcode_number="0"/>
                         <Action ID="ChangeGoal" current_decision="3"/>
                     </ReactiveSequence>
                     <ReactiveSequence>
                         <Action ID="SendDecision" catch_decision="0" if_navigation="0" qrcode_number="0"/>
-                        <Action ID="SendPositionError" goal="{goal}" target_angle="0"/>
                         <Action ID="RobotStatus"/>
                         <Condition ID="IfAdjust"/>
-                        <Condition ID="IfCatchBall" image_x_threshold_max="100" image_x_threshold_min="0" image_y_threshold_max="100" image_y_threshold_min="0"/>
+                        <Repeat num_cycles="20">
+                            <Action ID="Printf" txt="到达立桩"/>
+                        </Repeat>
                         <Action ID="RobotStatus"/>
                         <Condition ID="IfFinish"/>
                         <Action ID="SendDecision" catch_decision="0" if_navigation="1" qrcode_number="0"/>
@@ -58,7 +63,9 @@
                         <Action ID="SendPositionError" goal="{goal}" target_angle="90"/>
                         <Action ID="RobotStatus"/>
                         <Condition ID="IfAdjust"/>
-                        <Condition ID="IfCatchBall" image_x_threshold_max="100" image_x_threshold_min="0" image_y_threshold_max="100" image_y_threshold_min="0"/>
+                        <Repeat num_cycles="20">
+                            <Action ID="Printf" txt="到达立仓"/>
+                        </Repeat>
                         <Action ID="RobotStatus"/>
                         <Condition ID="IfFinish"/>
                         <Action ID="SendDecision" catch_decision="0" if_navigation="1" qrcode_number="0"/>
