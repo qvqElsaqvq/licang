@@ -4,7 +4,7 @@
     <BehaviorTree ID="BehaviorTree">
         <ReactiveSequence>
             <Action ID="SendDecision" catch_decision="0" if_navigation="0" qrcode_number="0"/>
-            <Condition ID="IfCatchBall" image_x_threshold_max="120" image_x_threshold_min="20" image_y_threshold_max="120" image_y_threshold_min="0"/>
+            <Condition ID="IfCatchBall" image_x_threshold_max="160" image_x_threshold_min="45" image_y_threshold_max="40" image_y_threshold_min="35"/>
         </ReactiveSequence>
     </BehaviorTree>
     <!-- ////////// -->
@@ -64,6 +64,19 @@
             <input_port name="target_angle"/>
         </Action>
         <Action ID="SendQrcode"/>
+        <Action ID="SendRotateV"/>
+        <Action ID="SetGoal">
+            <input_port name="position_x1"/>
+            <input_port name="position_x2"/>
+            <input_port name="position_x3"/>
+            <input_port name="position_x4"/>
+            <input_port name="position_x5"/>
+            <input_port name="position_y1"/>
+            <input_port name="position_y2"/>
+            <input_port name="position_y3"/>
+            <input_port name="position_y4"/>
+            <input_port name="position_y5"/>
+        </Action>
         <Action ID="UpdateGoal">
             <output_port default="{goal}" name="goal"/>
         </Action>

@@ -31,5 +31,8 @@ message_data robot_position_t{
     float y_err;
     float angle_err;
 };
+message_data rotate_velocity_t{
+    float rotate_velocity;
+};
 
 #endif //ROBOT_SERIAL_ROBOT_MESSAGE_H

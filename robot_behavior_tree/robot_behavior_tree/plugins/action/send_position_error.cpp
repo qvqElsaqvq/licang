@@ -36,7 +36,8 @@ namespace nav2_behavior_tree
         tf2::Matrix3x3 euler(quaternion);
         double roll, pitch, yaw;
         euler.getRPY(roll, pitch, yaw);
-        //std::cout << "yaw: " << yaw << std::endl;
+        yaw = yaw / M_PI * 180.0;
+        std::cout << "yaw: " << yaw << std::endl;
         //计算坐标偏差(目标 - 当前)并发送
         robot_serial::msg::Location location_error;
         x_error_ = (float)(current_goal.pose.position.x - current_position.pose.position.x);
@@ -46,7 +47,8 @@ namespace nav2_behavior_tree
         location_error.x_err = x_error_;
         location_error.y_err = y_error_;
         location_error.angle_err = angle_error_;
-        position_err_pub_->publish(location_error);
+        for(int i = 0; i < 10; i++)
+            position_err_pub_->publish(location_error);
 
         return BT::NodeStatus::SUCCESS;
     }

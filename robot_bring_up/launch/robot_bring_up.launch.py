@@ -131,19 +131,14 @@ def generate_launch_description():
             robot_description_launch,
             rviz_node,
             TimerAction(
-                period=15.0,
+                period=10.0,
                 actions=[
                     point_lio_launch
                 ],
             ),
-            TimerAction(
-                period=10.0,
-                actions=[
-                    navigation_launch,
-                    obstacle_segmentation_launch
-                    #init_transform_launch
-                ],
-            )
+            navigation_launch,
+            obstacle_segmentation_launch
+            #init_transform_launch
             ]
 
 

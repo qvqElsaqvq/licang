@@ -7,5 +7,6 @@
 #include "robot_serial/msg/qrcodeinfo.hpp"
 #include "robot_serial/msg/robotstatus.hpp"
 #include "robot_serial/msg/location.hpp"
+#include "robot_serial/msg/rotate_velocity.hpp"
 
 #endif //ROBOT_SERIAL_SENTRY_MSG_H

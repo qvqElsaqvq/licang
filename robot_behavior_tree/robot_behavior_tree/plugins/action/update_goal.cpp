@@ -11,10 +11,14 @@ namespace nav2_behavior_tree
         : BT::ConditionNode(condition_name, conf),
         position_x(0.0),
         position_y(0.0),
-        is_match_finish(false)
+        cmd_status("avoid"),
+        is_match_finish(false),
+        if_navigation(1)
     {
         node_ = config().blackboard->get<rclcpp::Node::SharedPtr>("node");
         config().blackboard->get<std::string>("cmd_status", cmd_status);
+        config().blackboard->set<int>("if_navigation",if_navigation );
+        decision_pub_ = node_->create_publisher<robot_serial::msg::Decision>("/robot/decision", 10);
     }
 
     BT::NodeStatus UpdateGoalAction::tick()
@@ -65,8 +69,15 @@ namespace nav2_behavior_tree
         pose.pose.orientation.z = 0.0;
         pose.pose.orientation.w = 1.0;
         setOutput<geometry_msgs::msg::PoseStamped>("goal",pose);
-        std::cout << "当前状态 " << cmd_status << std::endl;
         std::cout<<"更新目标点"<<position_x<<" , "<<position_y<<std::endl;
+        if_navigation = 1;
+        config().blackboard->set<int>("if_navigation",if_navigation);
+        robot_serial::msg::Decision decision;
+
+        decision.catch_decision = 0;;
+        decision.qrcode_number = 0;
+        decision.if_navigation = if_navigation;
+        decision_pub_->publish(decision);
         return BT::NodeStatus::SUCCESS;
     }
 } // namespace nav2_behavior_tree

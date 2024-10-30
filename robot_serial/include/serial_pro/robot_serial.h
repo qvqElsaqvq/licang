@@ -24,6 +24,7 @@ private:
     rclcpp::Subscription<robot_serial::msg::Decision>::SharedPtr DecisionSubscription;
     rclcpp::Subscription<robot_serial::msg::Location>::SharedPtr LocationErrorSubscription;
     rclcpp::Publisher<robot_serial::msg::Robotstatus>::SharedPtr RobotStatusPublisher;
+    rclcpp::Subscription<robot_serial::msg::RotateVelocity>::SharedPtr RotateVelocitySubscription;
     
     void velocityCallback(const geometry_msgs::msg::Twist::SharedPtr msg){
         static uint8_t SOF = 0x00;
@@ -34,7 +35,7 @@ private:
         };
         SOF++;
         warehouseSerial.write(0x0501, SOF,velocity);
-        RCLCPP_INFO(this->get_logger(),"%f %f %f",msg->linear.x,msg->linear.y);
+        //RCLCPP_INFO(this->get_logger(),"%f %f %f",msg->linear.x,msg->linear.y);
     }
     void decisionCallback(const robot_serial::msg::Decision::SharedPtr msg){
         static uint8_t SOF = 0x00;
@@ -45,7 +46,7 @@ private:
         };
         SOF++;
         warehouseSerial.write(0x0502, SOF, decision);
-        //RCLCPP_INFO(this->get_logger());
+        RCLCPP_INFO(this->get_logger(), "if_navigation: %d,catch_decision: %d", msg->if_navigation, msg->catch_decision);
     }
     void locationerrorCallback(const robot_serial::msg::Location::SharedPtr msg)
     {
@@ -57,6 +58,15 @@ private:
         };
         SOF++;
         warehouseSerial.write(0x0503, SOF, location_error);
+    }
+    void rotatevelocityCallback(const robot_serial::msg::RotateVelocity::SharedPtr msg)
+    {
+        static uint8_t SOF = 0x00;
+        rotate_velocity_t rotate_velocity{
+            msg->rotate_velocity,
+        };
+        SOF++;
+        warehouseSerial.write(0x0504, SOF, rotate_velocity);
     }
 
 public:
@@ -112,6 +122,8 @@ public:
         LocationErrorSubscription = create_subscription<robot_serial::msg::Location>("/robot/location_error",
                         1, std::bind(&RobotSerial::locationerrorCallback, this, std::placeholders::_1));
         RobotStatusPublisher = create_publisher<robot_serial::msg::Robotstatus>("/robot/robotstatus", 1);
+        RotateVelocitySubscription = create_subscription<robot_serial::msg::RotateVelocity>("/robot/velocity",
+                        1, std::bind(&RobotSerial::rotatevelocityCallback, this, std::placeholders::_1));
 
         warehouseSerial.spin(true);
     }

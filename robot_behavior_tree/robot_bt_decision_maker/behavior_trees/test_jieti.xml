@@ -3,7 +3,8 @@
     <!-- ////////// -->
     <BehaviorTree ID="BehaviorTree">
         <ReactiveSequence>
-            <Action ID="SetGoal" goal="{goal}" position_x1="3.86" position_x2="3.86" position_x3="1.89" position_x4="2.39" position_x5="1.82" position_y1="-0.54" position_y2="0.45" position_y3="-1.03" position_y4="-0.13" position_y5="0.49"/>
+            <Action ID="SetGoal" goal="{goal}" position_x1="2.41" position_x2="2.41" position_x3="2.41" position_x4="2.41" position_x5="2.41" position_y1="0.64" position_y2="0.64" position_y3="0.64" position_y4="0.64" position_y5="0.64"/>
+            <Action ID="ChangeGoal" current_decision="2"/>
             <Decorator ID="UserForceSuccess">
                 <ReactiveFallback>
                     <Condition ID="IsGoalUpdate" goal="{goal}"/>
@@ -12,65 +13,50 @@
             </Decorator>
             <ForceSuccess>
                 <ReactiveSequence>
-                    <Condition ID="IsGoalReached" goal="{goal}"/>
-                    <Action ID="SendDecision" catch_decision="0" if_navigation="0" qrcode_number="0"/>
-                </ReactiveSequence>
-            </ForceSuccess>
-            <Inverter>
-                <ReactiveSequence>
                     <Condition ID="IfMatchFinish"/>
                     <Action ID="UpdateGoal" goal="{goal}"/>
                 </ReactiveSequence>
-            </Inverter>
+            </ForceSuccess>
             <ReactiveSequence>
-                <Inverter>
-                    <Condition ID="IfNavigation"/>
-                </Inverter>
+                <Condition ID="IsGoalReached" goal="{goal}"/>
                 <Switch5 case_1="avoid" case_2="rotating" case_3="platform" case_4="column" case_5="warehouse" variable="{cmd_status}">
+                    <Action ID="ChangeGoal" current_decision="1"/>
                     <ReactiveSequence>
-                        <Action ID="SendDecision" catch_decision="0" if_navigation="1" qrcode_number="0"/>
-                        <Action ID="ChangeGoal" current_decision="1"/>
-                    </ReactiveSequence>
-                    <ReactiveSequence>
-                        <Action ID="SendPositionError" goal="{goal}" target_angle="90"/>
-                        <Action ID="RobotStatus"/>
-                        <Condition ID="IfAdjust"/>
-                        <Condition ID="IfCatchBall" image_x_threshold_max="160" image_x_threshold_min="45" image_y_threshold_max="50" image_y_threshold_min="40"/>
-                        <Action ID="RobotStatus"/>
-                        <Condition ID="IfFinish"/>
-                        <Delay delay_msec="100">
-                            <Action ID="SendDecision" catch_decision="0" if_navigation="1" qrcode_number="0"/>
-                        </Delay>
-                        <Action ID="ChangeGoal" current_decision="2"/>
-                    </ReactiveSequence>
-                    <ReactiveSequence>
+                        <Action ID="SendDecision" catch_decision="0" if_navigation="0" qrcode_number="0"/>
                         <Action ID="SendPositionError" goal="{goal}" target_angle="-90"/>
                         <Action ID="RobotStatus"/>
                         <Condition ID="IfAdjust"/>
-                        <Condition ID="IfCatchBall" image_x_threshold_max="115" image_x_threshold_min="55" image_y_threshold_max="120" image_y_threshold_min="70"/>
+                        <Condition ID="IfCatchBall" image_x_threshold_max="160" image_x_threshold_min="135" image_y_threshold_max="46" image_y_threshold_min="32"/>
                         <Action ID="RobotStatus"/>
                         <Condition ID="IfFinish"/>
-                        <Delay delay_msec="100">
-                            <Action ID="SendDecision" catch_decision="0" if_navigation="0" qrcode_number="0"/>
-                        </Delay>
-                        <Action ID="ChangeGoal" current_decision="3"/>
+                        <Action ID="SendDecision" catch_decision="0" if_navigation="1" qrcode_number="0"/>
                     </ReactiveSequence>
                     <ReactiveSequence>
-                        <Action ID="RobotStatus"/>
-                        <Condition ID="IfAdjust"/>
-                        <Condition ID="IfCatchBall" image_x_threshold_max="85" image_x_threshold_min="55" image_y_threshold_max="120" image_y_threshold_min="70"/>
-                        <Action ID="RobotStatus"/>
-                        <Condition ID="IfFinish"/>
-                        <Delay delay_msec="100">
-                            <Action ID="SendDecision" catch_decision="0" if_navigation="1" qrcode_number="0"/>
-                        </Delay>
-                        <Action ID="ChangeGoal" current_decision="4"/>
-                    </ReactiveSequence>
-                    <ReactiveSequence>
+                        <Action ID="SendDecision" catch_decision="0" if_navigation="0" qrcode_number="0"/>
                         <Action ID="SendPositionError" goal="{goal}" target_angle="90"/>
                         <Action ID="RobotStatus"/>
                         <Condition ID="IfAdjust"/>
-                        <Action ID="SendQrcode"/>
+                        <Condition ID="IfCatchBall" image_x_threshold_max="90" image_x_threshold_min="70" image_y_threshold_max="120" image_y_threshold_min="0"/>
+                        <Action ID="RobotStatus"/>
+                        <Condition ID="IfFinish"/>
+                        <Action ID="SendDecision" catch_decision="0" if_navigation="0" qrcode_number="0"/>
+                    </ReactiveSequence>
+                    <ReactiveSequence>
+                        <Action ID="SendDecision" catch_decision="0" if_navigation="0" qrcode_number="0"/>
+                        <Action ID="RobotStatus"/>
+                        <Condition ID="IfAdjust"/>
+                        <Action ID="Printf" txt="到达立桩"/>
+                        <Action ID="RobotStatus"/>
+                        <Condition ID="IfFinish"/>
+                        <Action ID="SendDecision" catch_decision="0" if_navigation="1" qrcode_number="0"/>
+                        <Action ID="ChangeGoal" current_decision="4"/>
+                    </ReactiveSequence>
+                    <ReactiveSequence>
+                        <Action ID="SendDecision" catch_decision="0" if_navigation="0" qrcode_number="0"/>
+                        <Action ID="SendPositionError" goal="{goal}" target_angle="90"/>
+                        <Action ID="RobotStatus"/>
+                        <Condition ID="IfAdjust"/>
+                        <Action ID="Printf" txt="到达立仓"/>
                         <Action ID="RobotStatus"/>
                         <Condition ID="IfFinish"/>
                         <Action ID="SendDecision" catch_decision="0" if_navigation="1" qrcode_number="0"/>
@@ -141,7 +127,6 @@
             <input_port name="target_angle"/>
         </Action>
         <Action ID="SendQrcode"/>
-        <Action ID="SendRotateV"/>
         <Action ID="SetGoal">
             <output_port name="goal"/>
             <input_port name="position_x1"/>

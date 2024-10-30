@@ -44,14 +44,16 @@ namespace nav2_behavior_tree
             decision.qrcode_number = 0x00;
             decision_pub_->publish(decision);
             std::cout<<"--------拨球--------"<<std::endl;
+            image_x = 0;
+            image_y = 0;
             return BT::NodeStatus::SUCCESS;
         }
         decision.if_navigation = 0x00;
         decision.catch_decision = 0x00;
         decision.qrcode_number = 0x00;
         decision_pub_->publish(decision);
-        std::cout<<"--------等待--------"<<std::endl;
-        return BT::NodeStatus::FAILURE;
+        //std::cout<<"--------等待--------"<<std::endl;
+        return BT::NodeStatus::SUCCESS;
     }
 
     void IfCatchBallCondition::imagelocationCallback(const robot_serial::msg::Imagelocation::SharedPtr msg){

@@ -33,17 +33,12 @@ namespace nav2_behavior_tree
         config().blackboard->get<int>("if_navigation", if_navigation);
         if(if_navigation){
             geometry_msgs::msg::PoseStamped current_pose;
-            if (!nav2_util::getCurrentPose(
-                    current_pose, *tf_, global_frame_, robot_base_frame_,
-                    transform_tolerance_))
+            if (!nav2_util::getCurrentPose(current_pose, *tf_, global_frame_,
+                robot_base_frame_, transform_tolerance_))
             {
                 std::cout<<"没有获取到TF变换"<<std::endl;
                 return BT::NodeStatus::FAILURE;
             }
-            // tf2::Quaternion quaternion(current_pose.pose.orientation.x, current_pose.pose.orientation.y, current_pose.pose.orientation.z, current_pose.pose.orientation.w);
-            // tf2::Matrix3x3 euler(quaternion);
-            // double roll, pitch, yaw;
-            // euler.getRPY(roll, pitch, yaw);
             if((fabs(current_goal.pose.position.x - current_pose.pose.position.x) <= 0.1)&&(fabs(current_goal.pose.position.y - current_pose.pose.position.y) <= 0.1))
             {
                 is_goal_reached = true;
@@ -58,9 +53,9 @@ namespace nav2_behavior_tree
                 return BT::NodeStatus::FAILURE;
             }
         }
-        else{
-            return BT::NodeStatus::SUCCESS;
-        }
+        // config().blackboard->set<int>("if_navigation", false);
+        config().blackboard->set<bool>("is_goal_reached",true);
+        return BT::NodeStatus::SUCCESS;
     }
 } // namespace nav2_behavior_tree
 

@@ -13,6 +13,7 @@ namespace nav2_behavior_tree
           is_adjust(false)
     {
         config().blackboard->get<bool>("is_adjust", is_adjust);
+        config().blackboard->set<bool>("is_openmv_open", false);
     }
 
     BT::NodeStatus IfAdjustCondition::tick()
@@ -21,8 +22,10 @@ namespace nav2_behavior_tree
         if (is_adjust)
         {
             std::cout<<"微调完成，准备夹球"<<std::endl;
+            config().blackboard->set<bool>("is_openmv_open", true);
             return BT::NodeStatus::SUCCESS;
         }
+        config().blackboard->set<bool>("is_openmv_open", false);
         std::cout<<"微调未完成，等待中"<<std::endl;
         return BT::NodeStatus::FAILURE;
     }

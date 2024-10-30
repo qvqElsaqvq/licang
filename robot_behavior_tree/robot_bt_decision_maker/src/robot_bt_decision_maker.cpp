@@ -31,8 +31,6 @@ public:
         this->get_parameter("plugin_lib_names", plugin_lib_names_);
         this->declare_parameter("bt_xml_filename", std::string(""));
         this->get_parameter("bt_xml_filename", bt_xml_filename_);
-        this->declare_parameter("is_we_are_blue", true);
-        this->get_parameter("is_we_are_blue", is_we_are_blue_);
         this->declare_parameter("tree_name", std::vector<std::string>());
         this->get_parameter("tree_name", tree_name);
         waitNav2();
@@ -69,7 +67,6 @@ public:
         blackboard_->set<std::chrono::milliseconds>("wait_for_service_timeout", wait_for_service_timeout_);
         blackboard_->set<std::chrono::milliseconds>("bt_loop_duration", bt_loop_duration_); // NOLINT
         blackboard_->set<std::shared_ptr<tf2_ros::Buffer>>("tf_buffer", tfbuffer_);         // NOLINT
-        blackboard_->set<bool>("is_we_are_blue", is_we_are_blue_);
         blackboard_->set<float>("pose_x",0.0);
         blackboard_->set<float>("pose_y",0.0);
         blackboard_->set<bool>("is_adjust",false);
@@ -91,16 +88,7 @@ public:
         blackboard_->set<double>("target_y5", 0.0);
         blackboard_->set<double>("init_x", 0.0);
         blackboard_->set<double>("init_y", 0.0);
-        if(is_we_are_blue_)
-        {
-            blackboard_->set<float>("exchange_x",-4.11);
-            blackboard_->set<float>("exchange_y",-5.0);
-        }
-        else
-        {
-            blackboard_->set<float>("exchange_x",19.7);
-            blackboard_->set<float>("exchange_y",5.85);
-        }
+        blackboard_->set<bool>("is_openmv_open", false);
         if (!loadBehaviorTree(bt_xml_filename_, blackboard_))
         {
             RCLCPP_ERROR(this->get_logger(), "加载行为树失败.");
@@ -157,7 +145,6 @@ private:
     int wait_for_service_timeout_in_millisec_;
     std::vector<std::string> plugin_lib_names_;
     std::string bt_xml_filename_;
-    bool is_we_are_blue_;
 
     std::unique_ptr<nav2_behavior_tree::BehaviorTreeEngine> bt_;
     BT::Tree tree_;
@@ -199,7 +186,6 @@ private:
                 blackboard->set<std::chrono::milliseconds>("wait_for_service_timeout", wait_for_service_timeout_);
                 blackboard->set<std::chrono::milliseconds>("bt_loop_duration", bt_loop_duration_); // NOLINT
                 blackboard->set<std::shared_ptr<tf2_ros::Buffer>>("tf_buffer", tfbuffer_);         // NOLINT
-                blackboard->set<bool>("is_we_are_blue", is_we_are_blue_);
                 blackboard->set<float>("pose_x",0.0);
                 blackboard->set<float>("pose_y",0.0);
                 blackboard->set<bool>("is_adjust",false);
@@ -221,16 +207,7 @@ private:
         		blackboard->set<double>("target_y5", 0.0);
                 blackboard->set<double>("init_x", 0.0);
         		blackboard->set<double>("init_y", 0.0);
-                if(is_we_are_blue_)
-                {
-                    blackboard->set<float>("exchange_x",-4.11);
-                    blackboard->set<float>("exchange_y",-5.0);
-                }
-                else
-                {
-                    blackboard->set<float>("exchange_x",19.7);
-                    blackboard->set<float>("exchange_y",5.85);
-                }
+                blackboard->set<bool>("is_openmv_open", false);
             }
         }
         catch (const std::exception &e)

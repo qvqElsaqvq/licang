@@ -105,8 +105,11 @@ namespace nav2_behaviors
         float head_index_y = -min_index_y;
         float length = sqrt(head_index_x * head_index_x + head_index_y * head_index_y);
 
-        cmd_vel_.linear.x = speed_ * head_index_x / length;
-        cmd_vel_.linear.y = speed_ * head_index_y / length;
+        // cmd_vel_.linear.x = speed_ * head_index_x / length;
+        // cmd_vel_.linear.y = speed_ * head_index_y / length;
+
+        cmd_vel_.linear.x = 0.08 * head_index_x / length;
+        cmd_vel_.linear.y = 0.08 * head_index_y / length;
 
         cmd_vel_.angular.z = 0;
         vel_pub_->publish(cmd_vel_);

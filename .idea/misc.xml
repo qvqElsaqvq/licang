@@ -9,7 +9,7 @@
   <component name="CMakePythonSetting">
     <option name="pythonIntegrationState" value="YES" />
   </component>
-  <component name="CMakeWorkspace" PROJECT_DIR="$PROJECT_DIR$/robot_behavior_tree/robot_behavior_tree">
+  <component name="CMakeWorkspace" PROJECT_DIR="$PROJECT_DIR$/robot_behavior_tree/robot_behaviors">
     <contentRoot DIR="$PROJECT_DIR$" />
   </component>
 </project>

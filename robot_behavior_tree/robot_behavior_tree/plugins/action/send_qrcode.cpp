@@ -35,13 +35,13 @@ namespace nav2_behavior_tree
 
     void SendQrcodeAction::qrcodeCallback(const robot_serial::msg::Qrcodeinfo::SharedPtr msg){
         if(msg->qrcode_ball == 0x31){
-            qrcode_number = 0x01;
+            qrcode_number = 0x11;
         }
         else if(msg->qrcode_ball == 0x32){
-            qrcode_number = 0x02;
+            qrcode_number = 0x12;
         }
         else if(msg->qrcode_ball == 0x33){
-            qrcode_number = 0x03;
+            qrcode_number = 0x13;
         }
     }
 } // namespace nav2_behavior_tree

@@ -49,7 +49,7 @@ private:
                 min_index = i;
             }
         }
-        if (min_distance > robot_radius_ + 0.1)
+        if (min_distance > robot_radius_ + 0.02)
         {
             geometry_msgs::msg::Twist cmd_vel_;
             cmd_vel_.linear.x = 0;
@@ -70,8 +70,10 @@ private:
         float head_index_y = -min_index_y;
         float length = sqrt(head_index_x * head_index_x + head_index_y * head_index_y);
 
-        cmd_vel_.linear.x = 1.0 * head_index_x / length;
-        cmd_vel_.linear.y = 1.0 * head_index_y / length;
+//        cmd_vel_.linear.x = 1.0 * head_index_x / length;
+//        cmd_vel_.linear.y = 1.0 * head_index_y / length;
+        cmd_vel_.linear.x = 0.08 * head_index_x / length;
+        cmd_vel_.linear.y = 0.08 * head_index_y / length;
         cmd_vel_.angular.z = 0;
         cmd_vel_pub_->publish(cmd_vel_);
     }

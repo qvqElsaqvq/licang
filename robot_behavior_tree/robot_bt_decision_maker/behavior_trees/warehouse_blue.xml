@@ -35,7 +35,7 @@
                         <Action ID="SendPositionError" goal="{goal}" target_angle="90"/>
                         <Action ID="RobotStatus"/>
                         <Condition ID="IfAdjust"/>
-                        <Condition ID="IfCatchBall" image_x_threshold_max="160" image_x_threshold_min="45" image_y_threshold_max="50" image_y_threshold_min="40"/>
+                        <Condition ID="IfCatchBall" image_x_threshold_max="160" image_x_threshold_min="120" image_y_threshold_max="120" image_y_threshold_min="50"/>
                         <Action ID="RobotStatus"/>
                         <Condition ID="IfFinish"/>
                         <Delay delay_msec="100">

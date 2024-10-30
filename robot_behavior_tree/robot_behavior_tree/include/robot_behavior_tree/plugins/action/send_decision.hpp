@@ -1,5 +1,5 @@
-#ifndef SEND_DECISION_HPP_
-#define SEND_DECISION_HPP_
+#ifndef SEND_DECISION_HPP
+#define SEND_DECISION_HPP
 
 #include <memory>
 #include <mutex>
@@ -48,10 +48,11 @@ namespace nav2_behavior_tree
         int if_navigation;   //是否在导航模式，0为不在，1为在
         int  catch_decision; //是否拨球，0为不拨，1为拨
         int qrcode_number;   //二维码识别到的数字
+        std::string cmd_status;
         rclcpp::Publisher<robot_serial::msg::Decision>::SharedPtr decision_pub_;
         rclcpp::Node::SharedPtr node_;
     };
 
 } // namespace nav2_behavior_tree
 
-#endif // NAV2_BEHAVIOR_TREE__PLUGINS__CONDITION__IS_BATTERY_LOW_CONDITION_HPP_
+#endif // SEND_DECISION_HPP

@@ -9,6 +9,8 @@
 #include <mutex>
 
 #include "rclcpp/rclcpp.hpp"
+#include "robot_serial/msg/decision.hpp"
+#include "geometry_msgs/msg/pose_stamped.hpp"
 #include "behaviortree_cpp_v3/action_node.h"
 
 namespace nav2_behavior_tree
@@ -51,6 +53,7 @@ namespace nav2_behavior_tree
             BT::InputPort<double>("position_y4", "position_y to plan to"),
             BT::InputPort<double>("position_x5", "position_x to plan to"),
             BT::InputPort<double>("position_y5", "position_y to plan to"),
+            BT::OutputPort<geometry_msgs::msg::PoseStamped>("goal", "Destination to plan to"),
             };
         }
 
@@ -67,6 +70,11 @@ namespace nav2_behavior_tree
         double position_y4;
         double position_x5;
         double position_y5;
+        int if_navigation;
+        std::string cmd_status;
+        rclcpp::Node::SharedPtr node_;
+        geometry_msgs::msg::PoseStamped pose;
+        rclcpp::Publisher<robot_serial::msg::Decision>::SharedPtr decision_pub_;
     };
 
 } // namespace nav2_behavior_tree

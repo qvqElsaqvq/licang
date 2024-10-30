@@ -10,6 +10,7 @@
 #include "geometry_msgs/msg/point.hpp"
 #include "geometry_msgs/msg/quaternion.hpp"
 #include "geometry_msgs/msg/pose_stamped.hpp"
+#include "robot_serial/msg/decision.hpp"
 #include "behaviortree_cpp_v3/condition_node.h"
 #include <nav2_msgs/action/navigate_to_pose.hpp>
 
@@ -61,8 +62,10 @@ namespace nav2_behavior_tree
         double position_y;
         geometry_msgs::msg::PoseStamped pose;
         rclcpp::Publisher<geometry_msgs::msg::PoseStamped>::SharedPtr goal_pub_;
-        std::string cmd_status;  //0-avoid,1-rotating,2-platform,3-column,4-
+        std::string cmd_status;  //0-avoid,1-rotating,2-platform,3-column,4-warehouse
         bool is_match_finish;
+        int if_navigation;
+        rclcpp::Publisher<robot_serial::msg::Decision>::SharedPtr decision_pub_;
     };
 
 } // namespace nav2_behavior_tree

@@ -1,13 +1,8 @@
 map_server:
     ros__parameters:
-        yaml_filename: "/home/sentry111/licang_ws/src/licang/robot_bring_up/maps/test1.yaml"
-
-#map_odom_pub_node:
-#    ros__parameters:
-#        global_frame_id: map
-#        odom_frame_id: odom
-#        initial_trans: [ 0.0, 0.0, 0.0 ] # 初始位姿
-#        initial_rot: [ 0.0, 0.0, 0.0, 1.0 ] # 初始四元数
+        yaml_filename: "/home/sentry111/licang_ws/src/licang/robot_bring_up/maps/test.yaml"
+        #yaml_filename: "/home/sentry111/licang_ws/src/licang/robot_bring_up/maps/warehouse_red.yaml"
+        #yaml_filename: "/home/sentry111/licang_ws/src/licang/robot_bring_up/maps/warehouse_blue.yaml"
 
 obstacle_segmentation_node:
     ros__parameters:
@@ -24,9 +19,11 @@ obstacle_segmentation_node:
         obstacle_z_min: -0.15 # 障碍物的z最小值(livox坐标系)
         obstacle_z_max: 0.45 # 障碍物的z最大值(livox坐标系)
         obstacle_range_x_min: -0.35 # 障碍物的最小距离(livox坐标系)
-        obstacle_range_x_max: 0.2 # 障碍物的最大距离(livox坐标系)
+        obstacle_range_x_max: 0.32 # 障碍物的最大距离(livox坐标系)
         obstacle_range_y_min: -0.4
         obstacle_range_y_max: 0.05
+        obstacle_range_z_min: -0.12
+        obstacle_range_z_max: 0.28
         point_frame: "livox"
 
 ## PCD转二维栅格地图
@@ -35,8 +32,8 @@ pcd2pgm_node:
         pcd_path: "/home/sentry111/licang_ws/src/licang/Point-LIO_cxr/PCD" # 点云路径
         pcd_name: "warehouse.pcd"
         map_path: "/home/sentry111/licang_ws/src/licang/robot_bring_up/maps"
-        map_name: "test1.png"
-        yaml_name: "test1.yaml"
+        map_name: "test.png"
+        yaml_name: "test.yaml"
         method: "point" # normal、height或者point，代表不同的转换方法
         thre_x_min: -50.0 # 点云范围
         thre_x_max: 50.0 # 点云范围
@@ -56,103 +53,6 @@ pcd2pgm_node:
         point_num_for_statistical: 100 # 用于统计滤波的点的数量
         standard_deviation_multiplier: 1.0 # 标准差倍数
 
-laserMapping:
-    ros__parameters:
-        common:
-            lid_topic:  "/livox/lidar" # 接收的雷达数据的topic，消息类型为CustomMsg
-            imu_topic:  "/livox/imu" # 接收的IMU数据的topic，消息类型为sensor_msgs::Imu
-            # imu_topic:  "/imu/data"
-            odom_topic: "/livox/odometry" # 发布的里程计数据的topic，消息类型为nav_msgs::Odometry
-            odom_frame: "map" # 里程计坐标系
-            base_frame: "livox" # 机器人坐标系
-            con_frame: false # true: if you need to combine several LiDAR frames into one # 是否需要将多帧点云数据合并成一帧
-            con_frame_num: 1 # the number of frames combined # 合并的帧数
-            cut_frame: false # true: if you need to cut one LiDAR frame into several subframes # 是否需要将一帧点云数据分割成多帧
-            cut_frame_time_interval: 0.1 # should be integral fraction of 1 / LiDAR frequency # 分割的时间间隔，应该是1/LiDAR频率的整数倍
-            time_diff_lidar_to_imu: 0.0 # Time offset between LiDAR and IMU calibrated by other algorithms, e.g., LI-Init (find in Readme)
-              # LiDAR和IMU之间的时间偏移，由其他算法校准，例如LI-Init（在Readme中查找）TODO需要调整
-              # the timesample of IMU is transferred from the current timeline to LiDAR's timeline by subtracting this value
-            # IMU的时间样本通过减去该值从当前时间线转换到LiDAR的时间线
-
-        preprocess:
-            lidar_type: 1 # 1表示Livox Avia LiDAR
-            scan_line: 4 # Livox MID360的扫描线数
-            timestamp_unit: 3 # the unit of time/t field in the PointCloud2 rostopic: 0-second, 1-milisecond, 2-microsecond, 3-nanosecond.
-              # PointCloud2 rostopic中时间戳字段的单位：0-秒，1-毫秒，2-微秒，3-纳秒。
-            # 只对非Livox LiDAR起作用，Livox LiDAR采用了CustomMsg消息类型，这个设置不起作用
-            blind: 0.5 # LiDAR的盲区，单位为米
-
-        mapping:
-            imu_en: true
-            extrinsic_est_en: true # for aggressive motion, set this variable false
-            # 对于激进运动，将此变量设置为false
-            imu_time_inte: 0.005 # = 1 / frequency of IMU
-            # IMU的周期
-            lidar_time_inte: 0.1 # LiDAR的周期
-            satu_acc: 4.0 # the saturation value of IMU's acceleration. not related to the units
-            # IMU的加速度饱和值。与单位无关。TODO需要调整
-            satu_gyro: 35.0 # the saturation value of IMU's angular velocity. not related to the units
-            # IMU的角速度饱和值。与单位无关。TODO需要调整
-            acc_norm: 1.0 # 1.0 for g as unit, 9.81 for m/s^2 as unit of the IMU's acceleration
-            # IMU的加速度单位，1.0表示g，9.81表示m/s^2
-            lidar_meas_cov: 0.01 # 0.001; 0.01
-            # LiDAR测量噪声协方差 TODO需要调整
-            acc_cov_output: 500.0 # IMU的加速度输出噪声协方差 TODO需要调整
-            gyr_cov_output: 1000.00 # IMU的角速度输出噪声协方差 TODO需要调整
-            b_acc_cov: 0.0001 # IMU的加速度偏置噪声协方差 TODO需要调整
-            b_gyr_cov: 0.0001 # IMU的角速度偏置噪声协方差 TODO需要调整
-            imu_meas_acc_cov: 0.1 #0.1 # 0.1 #
-            # IMU的加速度测量噪声协方差 TODO需要调整
-            imu_meas_omg_cov: 0.1 #0.01 # 0.1
-            # IMU的角速度测量噪声协方差 TODO需要调整
-            gyr_cov_input: 0.01 # for IMU as input model
-            # IMU的角速度输入噪声协方差 TODO需要调整
-            acc_cov_input: 0.1 # for IMU as input model
-            # IMU的加速度输入噪声协方差 TODO需要调整
-            plane_thr: 0.1 # 0.05, the threshold for plane criteria, the smaller, the flatter a plane
-            # 平面判据的阈值，越小越平坦 TODO需要调整
-            match_s: 81.0 # 匹配窗口的大小 TODO不清楚作用
-            ivox_grid_resolution: 0.5 # 体素网格的分辨率
-            gravity: [0.0, 0.0, -9.810] # [0.0, 9.810, 0.0] # gravity to be aligned
-            # 要对齐的重力
-            gravity_init: [0.0, 0.0, -9.810] # [0.0, 9.810, 0.0] # # preknown gravity in the first IMU body frame, use when imu_en is false or start from a non-stationary state
-            # 第一个IMU坐标系中的预先知道的重力，当imu_en为false或从非静止状态开始时使用
-            # extrinsic_T: [ -0.011, -0.02339, 0.04412 ] # 点云坐标系在IMU坐标系下的位置 标准位置
-            extrinsic_T: [ -0.011, -0.02339, -0.04412 ] # 点云坐标系在IMU坐标系下的位置 倒装位置
-            extrinsic_R: [ 1.0, 0.0, 0.0,
-                           0.0, 1.0, 0.0,
-                           0.0, 0.0, 1.0 ] # 点云坐标系在IMU坐标系下的旋转矩阵
-
-        odometry:
-            publish_odometry_without_downsample: false
-
-        publish:
-            path_en: false # false: close the path output
-            # false：关闭路径输出
-            scan_publish_en: true # false: close all the point cloud output
-            # false：关闭所有点云输出
-            scan_bodyframe_pub_en: false  # true: output the point cloud scans in IMU-body-frame
-            # true：输出IMU坐标系下的点云
-
-        pcd_save:
-            pcd_save_en: true
-            interval: 1800 # how many LiDAR frames saved in each pcd file;
-              # 每个pcd文件中保存多少帧LiDAR数据
-              # -1 : all frames will be saved in ONE pcd file, may lead to memory crash when having too much frames.
-              # -1：所有帧都将保存在一个pcd文件中，当有太多帧时可能会导致内存崩溃。
-            #测试
-            #lmy
-            use_pcd_map_: false
-            prior_PCD_map_path: "/home/sentry111/licang_ws/src/licang/point_lio_ros2/point_lio/PCD/warehouse.pcd"
-        init_pos:
-            init_x: 0.0
-            init_y: 0.0
-            init_z: 0.0
-            initial_rot: [0.0, 0.0, 0.0, 1.0]
-        gcl:
-            task: "B"
-        #lmy
-
 bt_navigator:
     ros__parameters:
         global_frame: map
@@ -160,10 +60,6 @@ bt_navigator:
         odom_topic: /livox/odometry
         bt_loop_duration: 10
         default_server_timeout: 20
-        # 'default_nav_through_poses_bt_xml' and 'default_nav_to_pose_bt_xml' are use defaults:
-        # nav2_bt_navigator/navigate_to_pose_w_replanning_and_recovery.xml
-        # nav2_bt_navigator/navigate_through_poses_w_replanning_and_recovery.xml
-        # They can be set here or via a RewrittenYaml remap from a parent launch file to Nav2.
         plugin_lib_names:
             - nav2_keep_away_from_obstacles_action_bt_node
             - nav2_navigate_to_pose_action_bt_node
@@ -184,8 +80,12 @@ robot_bt_decision_maker_node:
         loop_duration_in_millisec: 100
         server_timeout_in_millisec: 1000
         transform_tolerance: 0.15
-        bt_xml_filename: "/behavior_trees/paotu_test.xml"
-        tree_name: ["/behavior_trees/paotu_test.xml"]
+        #bt_xml_filename: "/behavior_trees/test_licang.xml"
+        #tree_name: ["/behavior_trees/test_licang.xml"]
+        bt_xml_filename: "/behavior_trees/warehouse_red.xml"
+        tree_name: ["/behavior_trees/warehouse_red.xml"]
+        #bt_xml_filename: "/behavior_trees/warehouse_blue.xml"
+        #tree_name: ["/behavior_trees/warehouse_blue.xml"]
         plugin_lib_names:
             - nav2_keep_away_from_obstacles_action_bt_node
             - nav2_navigate_to_pose_action_bt_node
@@ -211,6 +111,7 @@ robot_bt_decision_maker_node:
             - nav2_send_position_error_action_bt_node
             - nav2_receive_init_error_action_bt_node
             - nav2_set_goal_action_bt_node
+            - nav2_send_rotate_v_action_bt_node
 robot_bt_decision_maker_node_rclcpp_node:
     ros__parameters:
         goal_reached_tol: 0.15 # 允许到目标位置的最终x和y的偏差（以米为单位），不考虑角度差
@@ -219,7 +120,7 @@ robot_bt_decision_maker_node_rclcpp_node:
 controller_server:
     ros__parameters:
         odom_topic: /livox/odometry
-        controller_frequency: 30.0 # 运行控制器的频率 (赫兹)。
+        controller_frequency: 50.0 # 运行控制器的频率 (赫兹)。
         controller_plugin_types: ["teb_local_planner::TebLocalPlannerROS"]
         goal_checker_plugins: ["general_goal_checker"] # "precise_goal_checker"
         controller_plugins: ["FollowPath"]
@@ -232,8 +133,8 @@ controller_server:
             plugin: teb_local_planner::TebLocalPlannerROS
 
             teb_autosize: 1.0
-            dt_ref: 0.25 # 所需的轨迹时间分辨率
-            dt_hysteresis: 0.025 # 根据当前时间分辨率自动调整大小的滞后，建议使用dt_ref的 10%
+            dt_ref: 0.35 # 所需的轨迹时间分辨率
+            dt_hysteresis: 0.035 # 根据当前时间分辨率自动调整大小的滞后，建议使用dt_ref的 10%
             max_samples: 500
             min_samples: 3 # 最小采样数,大于2
             global_plan_overwrite_orientation: True # 覆盖全局规划器提供的局部子目标的方向（因为它们通常仅提供 2D 路径）
@@ -253,8 +154,8 @@ controller_server:
 
             # Robot
 
-            max_vel_x: 0.6 # 机器人最大x轴速度m/s
-            max_vel_y: 0.6 # 机器人最大y轴速度m/s
+            max_vel_x: 0.5 # 机器人最大x轴速度m/s
+            max_vel_y: 0.5 # 机器人最大y轴速度m/s
             max_vel_x_backwards: 1.0 # 机器人最大x轴后退速度m/s
             max_vel_theta: 1.0 # 机器人最大角速度rad/s
             acc_lim_x: 1.0 # 机器人最大x轴平移加速度m/s^2
@@ -272,7 +173,7 @@ controller_server:
 
             # Obstacles
 
-            min_obstacle_dist: 0.01 # 机器人与障碍物之间的最小距离（以米为单位）2.28
+            min_obstacle_dist: 0.03 # 机器人与障碍物之间的最小距离（以米为单位）2.28
             inflation_dist: 0.04 # 非零惩罚成本的障碍物周围的缓冲区（应大于min_obstacle_dist才能生效）。
             include_costmap_obstacles: True # 指定是否应考虑本地成本图的障碍。每个被标记为障碍物的单元格都被视为点障碍物。因此，不要选择非常小的代价图分辨率，因为它会增加计算时间。
             costmap_obstacles_behind_robot_dist: 4.0 # 限制机器人后面规划时考虑的占用的本地成本图障碍（指定距离以米为单位）。
@@ -362,20 +263,20 @@ controller_server:
 local_costmap:
     local_costmap:
         ros__parameters:
-            update_frequency: 30.0
-            publish_frequency: 30.0
+            update_frequency: 60.0
+            publish_frequency: 60.0
             global_frame: map
             robot_base_frame: base_link
             rolling_window: True
-            width: 8
-            height: 8
+            width: 10
+            height: 10
             resolution: 0.05
             robot_radius: 0.05
             plugins: ["static_layer", "obstacle_layer", "inflation_layer"]
             inflation_layer:
                 plugin: "nav2_costmap_2d::InflationLayer"
                 cost_scaling_factor: 2.0
-                inflation_radius: 0.3
+                inflation_radius: 0.1
             obstacle_layer:
                 plugin: "nav2_costmap_2d::ObstacleLayer"
                 enabled: True
@@ -402,8 +303,8 @@ local_costmap:
 global_costmap:
     global_costmap:
         ros__parameters:
-            update_frequency: 30.0
-            publish_frequency: 30.0
+            update_frequency: 60.0
+            publish_frequency: 60.0
             global_frame: map
             robot_base_frame: base_link
             robot_radius: 0.05
@@ -434,12 +335,12 @@ global_costmap:
             inflation_layer:
                 plugin: "nav2_costmap_2d::InflationLayer"
                 cost_scaling_factor: 2.0
-                inflation_radius: 0.3
+                inflation_radius: 0.1
             always_send_full_costmap: True # 是否每次更新都发送完整的成本图，而不是更新。
 
 planner_server:
     ros__parameters:
-        expected_planner_frequency: 30.0
+        expected_planner_frequency: 60.0
         planner_plugins: ["GridBased"]
         GridBased:
             plugin: "nav2_navfn_planner/NavfnPlanner"
@@ -462,7 +363,7 @@ behavior_server:
         point_topic: /cloud_obstacle
         cycle_frequency: 50.0
         behavior_plugins: ["keep_away_from_obstacles"]
-        robot_radius: 0.2
+        robot_radius: 0.18
         keep_away_from_obstacles:
             plugin: "nav2_behaviors/KeepAwayFromObstacles"
         global_frame: map
@@ -481,7 +382,7 @@ waypoint_follower:
 
 velocity_smoother:
     ros__parameters:
-        smoothing_frequency: 50.0
+        smoothing_frequency: 60.0
         scale_velocities: False
         feedback: "OPEN_LOOP"
         max_velocity: [3.0, 3.0, 0.5]
